@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Alarich AI v3</title>
+<title>Alarich AI v4</title>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
 window.MathJax = {
@@ -15,150 +16,385 @@ window.MathJax = {
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-:root{
-  --bg:#0f172a; --panel:#111827; --border:#1f2937;
-  --bubble:#1e293b; --accent:#2563eb; --accent2:#60a5fa;
-  --text:#e5e7eb; --muted:#9ca3af;
-}
-html,body{height:100%}
-body{background:var(--bg);color:var(--text);display:flex;overflow:hidden}
 
-/* SIDEBAR */
+/* ===== DARK MODE (default) ===== */
+:root{
+  --bg:#0f172a;
+  --panel:#111827;
+  --border:#1f2937;
+  --bubble:#1e293b;
+  --accent:#2563eb;
+  --accent2:#60a5fa;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --input-bg:#0b1220;
+  --hover:#1a2333;
+  --danger:#ef4444;
+  --danger-border:#dc2626;
+}
+
+/* ===== LIGHT MODE ===== */
+body.light-mode{
+  --bg:#f1f5f9;
+  --panel:#ffffff;
+  --border:#e2e8f0;
+  --bubble:#f8fafc;
+  --accent:#2563eb;
+  --accent2:#1d4ed8;
+  --text:#1e293b;
+  --muted:#64748b;
+  --input-bg:#f1f5f9;
+  --hover:#e2e8f0;
+  --danger:#dc2626;
+  --danger-border:#b91c1c;
+}
+
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  overflow:hidden;
+  transition:background .2s, color .2s;
+}
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
 .sidebar{
-  width:270px; background:var(--panel); border-right:1px solid var(--border);
-  display:flex; flex-direction:column; transition:transform .25s ease;
-  flex-shrink:0; z-index:50;
+  width:270px;
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  transition:transform .25s ease;
+  flex-shrink:0;
+  z-index:50;
 }
-.logo{font-size:22px;font-weight:bold;color:var(--accent2);padding:16px;display:flex;align-items:center;gap:8px}
+.logo{
+  font-size:22px;font-weight:bold;color:var(--accent2);
+  padding:16px;display:flex;align-items:center;gap:8px;
+}
 .newchat-btn{
-  margin:0 12px 10px; padding:10px; background:var(--accent); color:white;
-  border:none; border-radius:10px; cursor:pointer; font-weight:600; font-size:14px;
+  margin:0 12px 10px;padding:10px;background:var(--accent);
+  color:white;border:none;border-radius:10px;cursor:pointer;
+  font-weight:600;font-size:14px;transition:opacity .15s;
 }
+.newchat-btn:hover{opacity:.9}
 .mode-select{margin:0 12px 12px}
 .mode-select select{
-  width:100%; padding:10px; border-radius:10px; border:1px solid var(--border);
-  background:#0b1220; color:var(--text); font-size:14px;
+  width:100%;padding:10px;border-radius:10px;
+  border:1px solid var(--border);background:var(--input-bg);
+  color:var(--text);font-size:14px;
 }
-.history{flex:1; overflow-y:auto; padding:0 8px}
+.history{flex:1;overflow-y:auto;padding:0 8px}
 .history-item{
-  display:flex; align-items:center; gap:8px; padding:9px 10px; border-radius:8px;
-  cursor:pointer; font-size:13px; color:var(--muted); margin-bottom:4px;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  display:flex;align-items:center;gap:8px;padding:9px 10px;
+  border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);
+  margin-bottom:4px;white-space:nowrap;overflow:hidden;
 }
-.history-item:hover{background:#1a2333}
-.history-item.active{background:#1e2a44; color:var(--text)}
+.history-item:hover{background:var(--hover)}
+.history-item.active{background:var(--hover);color:var(--text)}
+.history-item .title{overflow:hidden;text-overflow:ellipsis;flex:1}
 .history-item .del{
-  margin-left:auto; opacity:.5; font-size:12px; padding:2px 6px; border-radius:6px;
+  margin-left:auto;opacity:.5;font-size:12px;
+  padding:2px 6px;border-radius:6px;flex-shrink:0;
 }
-.history-item .del:hover{opacity:1; background:#374151}
-.sidebar-footer{padding:10px 14px; font-size:11px; color:var(--muted); border-top:1px solid var(--border)}
+.history-item .del:hover{opacity:1;background:#374151}
+.sidebar-footer{
+  padding:10px 14px;font-size:11px;color:var(--muted);
+  border-top:1px solid var(--border);
+}
 
-/* MAIN */
-.main{flex:1; display:flex; flex-direction:column; min-width:0}
+/* ============================================================
+   MAIN
+============================================================ */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
 .topbar{
-  display:flex; align-items:center; gap:10px; padding:12px 16px;
-  border-bottom:1px solid var(--border); background:var(--panel);
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  border-bottom:1px solid var(--border);background:var(--panel);
 }
-.hamburger{display:none; background:none; border:none; color:var(--text); font-size:20px; cursor:pointer}
+.hamburger{
+  display:none;background:none;border:none;
+  color:var(--text);font-size:20px;cursor:pointer;
+}
 .mode-badge{
-  display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
-  border-radius:999px; font-size:13px; font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;
 }
-.mode-academic{background:#1e3a8a33; color:#93c5fd; border:1px solid #1e40af}
-.mode-deeptalk{background:#4c1d9533; color:#c4b5fd; border:1px solid #6d28d9}
-.mode-exercise{background:#78350f33; color:#fcd34d; border:1px solid #b45309}
-.mode-islamic{background:#06402333; color:#6ee7b7; border:1px solid #047857}
+.mode-academic{background:#1e3a8a33;color:#93c5fd;border:1px solid #1e40af}
+.mode-deeptalk{background:#4c1d9533;color:#c4b5fd;border:1px solid #6d28d9}
+.mode-exercise{background:#78350f33;color:#fcd34d;border:1px solid #b45309}
+.mode-islamic{background:#06402333;color:#6ee7b7;border:1px solid #047857}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.icon-btn{
+  background:none;border:1px solid var(--border);color:var(--text);
+  border-radius:8px;padding:6px 10px;cursor:pointer;font-size:18px;
+  display:flex;align-items:center;transition:background .15s,color .15s;
+}
+.icon-btn:hover{background:var(--hover);color:var(--accent2)}
 
-.chat{flex:1; overflow-y:auto; padding:20px}
-.msg{max-width:85%; padding:14px 16px; border-radius:14px; margin:12px 0; line-height:1.7; font-size:15px; word-wrap:break-word}
-.msg img{max-width:100%}
-.user{background:var(--accent); margin-left:auto; border-bottom-right-radius:4px}
-.bot{background:var(--bubble); border-bottom-left-radius:4px}
-.msg pre{background:#0b1220; padding:10px; border-radius:8px; overflow-x:auto; margin:8px 0}
-.msg code{font-family:monospace; font-size:13px}
+/* CHAT AREA */
+.chat{flex:1;overflow-y:auto;padding:20px}
+.msg{
+  max-width:85%;padding:14px 16px;border-radius:14px;
+  margin:12px 0;line-height:1.7;font-size:15px;word-wrap:break-word;
+}
+.msg img{max-width:100%;border-radius:8px;margin:6px 0;display:block}
+.user{
+  background:var(--accent);margin-left:auto;
+  border-bottom-right-radius:4px;color:white;
+}
+.bot{
+  background:var(--bubble);border-bottom-left-radius:4px;
+  border:1px solid var(--border);
+}
+.msg pre{
+  background:var(--input-bg);padding:10px;
+  border-radius:8px;overflow-x:auto;margin:8px 0;
+}
+.msg code{font-family:monospace;font-size:13px}
 .msg ul,.msg ol{margin:8px 0 8px 20px}
-
-/* Arabic text styling for nicer rendering in Islamic mode */
-.msg [dir="rtl"], .msg .arabic{
+.msg table{border-collapse:collapse;width:100%;margin:8px 0}
+.msg th,.msg td{border:1px solid var(--border);padding:6px 10px;font-size:13px}
+.msg th{background:var(--input-bg)}
+/* Arabic/RTL text */
+.msg [dir="rtl"],.msg .arabic{
   font-family:'Amiri','Scheherazade New','Traditional Arabic','Segoe UI',serif;
-  font-size:1.25em; line-height:2; direction:rtl; text-align:right;
+  font-size:1.25em;line-height:2;direction:rtl;text-align:right;
 }
 
-.input-area{display:flex; gap:10px; padding:14px; background:var(--panel); border-top:1px solid var(--border)}
+/* ============================================================
+   INPUT AREA
+============================================================ */
+.input-area{
+  padding:10px 14px 14px;
+  background:var(--panel);
+  border-top:1px solid var(--border);
+}
+.file-preview-bar{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.file-chip{
+  display:flex;align-items:center;gap:6px;
+  background:var(--hover);border:1px solid var(--border);
+  border-radius:8px;padding:4px 10px;font-size:12px;color:var(--text);
+  max-width:200px;
+}
+.file-chip img{width:32px;height:32px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.file-chip .chip-name{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;
+}
+.file-chip .rm{cursor:pointer;opacity:.6;margin-left:2px;flex-shrink:0}
+.file-chip .rm:hover{opacity:1}
+.input-row{display:flex;gap:8px;align-items:flex-end}
+.attach-btn{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  border-radius:10px;padding:12px 13px;cursor:pointer;font-size:18px;
+  flex-shrink:0;transition:color .15s,background .15s;
+  display:flex;align-items:center;
+}
+.attach-btn:hover{color:var(--accent2);background:var(--hover)}
 textarea{
-  flex:1; min-height:50px; max-height:160px; border:1px solid var(--border); border-radius:12px;
-  padding:12px; resize:none; background:#0b1220; color:var(--text); font-size:15px;
+  flex:1;min-height:50px;max-height:160px;
+  border:1px solid var(--border);border-radius:12px;
+  padding:12px;resize:none;background:var(--input-bg);
+  color:var(--text);font-size:15px;
 }
 textarea:focus{outline:1px solid var(--accent)}
+textarea::placeholder{color:var(--muted)}
 .send{
-  background:var(--accent); color:white; border:none; border-radius:12px;
-  padding:0 22px; font-size:18px; cursor:pointer; flex-shrink:0;
+  background:var(--accent);color:white;border:none;
+  border-radius:12px;padding:0 22px;font-size:18px;
+  cursor:pointer;flex-shrink:0;height:50px;
+  display:flex;align-items:center;transition:opacity .15s;
 }
-.send:disabled{opacity:.5; cursor:not-allowed}
+.send:disabled{opacity:.5;cursor:not-allowed}
+.send:not(:disabled):hover{opacity:.9}
 
-/* OVERLAY for mobile sidebar */
-.overlay{display:none; position:fixed; inset:0; background:#0008; z-index:40}
+/* ============================================================
+   OVERLAY
+============================================================ */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:#0008;z-index:40;
+}
+.overlay.show{display:block}
 
-/* GATE (API key setup) */
+/* ============================================================
+   SETTINGS PANEL
+============================================================ */
+.settings-panel{
+  position:fixed;top:0;right:0;height:100%;width:320px;
+  background:var(--panel);border-left:1px solid var(--border);
+  z-index:60;transform:translateX(100%);
+  transition:transform .25s ease;
+  display:flex;flex-direction:column;overflow-y:auto;
+}
+.settings-panel.open{transform:translateX(0)}
+.settings-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--panel);z-index:1;
+}
+.settings-header h3{font-size:16px;font-weight:600;color:var(--text)}
+.settings-body{padding:20px;display:flex;flex-direction:column;gap:22px}
+.settings-section{display:flex;flex-direction:column;gap:10px}
+.settings-label{
+  font-size:11px;color:var(--muted);font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.settings-row{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;
+  font-size:14px;color:var(--text);
+}
+
+/* TOGGLE SWITCH */
+.toggle{position:relative;width:48px;height:26px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{
+  position:absolute;inset:0;border-radius:13px;
+  background:var(--border);cursor:pointer;transition:background .2s;
+}
+.toggle input:checked + .toggle-track{background:var(--accent)}
+.toggle-thumb{
+  position:absolute;top:3px;left:3px;
+  width:20px;height:20px;border-radius:50%;
+  background:white;transition:transform .2s;pointer-events:none;
+}
+.toggle input:checked ~ .toggle-thumb{transform:translateX(22px)}
+
+/* API KEY FIELD */
+.api-key-wrap{position:relative;display:flex;align-items:center}
+.api-key-wrap input{
+  width:100%;padding:10px 40px 10px 12px;
+  border-radius:10px;border:1px solid var(--border);
+  background:var(--input-bg);color:var(--text);font-size:13px;
+}
+.api-key-wrap input:focus{outline:1px solid var(--accent)}
+.eye-btn{
+  position:absolute;right:10px;background:none;border:none;
+  color:var(--muted);cursor:pointer;font-size:18px;
+  display:flex;align-items:center;padding:4px;
+}
+.eye-btn:hover{color:var(--text)}
+.model-select-full{
+  width:100%;padding:10px;border-radius:10px;
+  border:1px solid var(--border);background:var(--input-bg);
+  color:var(--text);font-size:13px;margin-top:6px;
+}
+.provider-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;
+}
+.prov-gemini{background:#1e3a8a33;color:#93c5fd;border:1px solid #1e40af}
+.prov-openrouter{background:#4c1d9533;color:#c4b5fd;border:1px solid #6d28d9}
+.save-key-btn{
+  padding:9px 14px;background:var(--accent);color:white;
+  border:none;border-radius:8px;cursor:pointer;
+  font-size:13px;font-weight:600;width:100%;
+  margin-top:8px;transition:opacity .15s;
+}
+.save-key-btn:hover{opacity:.9}
+.danger-btn{
+  padding:9px 14px;background:none;
+  color:var(--danger);border:1px solid var(--danger-border);
+  border-radius:8px;cursor:pointer;font-size:13px;width:100%;
+  transition:background .15s;
+}
+.danger-btn:hover{background:#ef44441a}
+.settings-info{
+  font-size:12px;color:var(--muted);line-height:1.7;
+  padding:12px;background:var(--hover);border-radius:8px;
+}
+.settings-divider{height:1px;background:var(--border);margin:0 -20px}
+
+/* ============================================================
+   GATE (API key setup)
+============================================================ */
 .gate{
-  position:fixed; inset:0; background:#0f172aee; display:flex; align-items:center;
-  justify-content:center; z-index:100; padding:20px;
+  position:fixed;inset:0;background:#0f172aee;
+  display:flex;align-items:center;justify-content:center;
+  z-index:100;padding:20px;
 }
+body.light-mode .gate{background:#f1f5f9ee}
 .gate-box{
-  background:var(--panel); border:1px solid var(--border); border-radius:16px;
-  padding:28px; max-width:420px; width:100%;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:16px;padding:28px;max-width:440px;width:100%;
 }
-.gate-box h2{color:var(--accent2); margin-bottom:6px}
-.gate-box p{font-size:13px; color:var(--muted); margin-bottom:14px; line-height:1.6}
-.gate-box input{
-  width:100%; padding:12px; border-radius:10px; border:1px solid var(--border);
-  background:#0b1220; color:var(--text); margin-bottom:10px; font-size:14px;
-}
-.gate-box button{
-  width:100%; padding:12px; border:none; border-radius:10px; background:var(--accent);
-  color:white; font-weight:600; cursor:pointer; font-size:15px;
+.gate-box h2{color:var(--accent2);margin-bottom:6px;font-size:20px}
+.gate-box p{
+  font-size:13px;color:var(--muted);
+  margin-bottom:16px;line-height:1.7;
 }
 .gate-box a{color:var(--accent2)}
-.hidden{display:none !important}
+.gate-box a:hover{text-decoration:underline}
+.gate-api-wrap{margin-bottom:12px}
+.gate-api-wrap input{
+  width:100%;padding:12px 44px 12px 14px;
+  border-radius:10px;border:1px solid var(--border);
+  background:var(--input-bg);color:var(--text);font-size:14px;
+}
+.gate-api-wrap input:focus{outline:1px solid var(--accent)}
+.gate-api-wrap{position:relative;display:flex;align-items:center}
+.primary-btn{
+  width:100%;padding:12px;border:none;border-radius:10px;
+  background:var(--accent);color:white;font-weight:600;
+  cursor:pointer;font-size:15px;transition:opacity .15s;
+}
+.primary-btn:hover{opacity:.9}
+.hidden{display:none!important}
 
-/* RESPONSIVE */
+/* ============================================================
+   RESPONSIVE
+============================================================ */
 @media(max-width:850px){
   .sidebar{
-    position:fixed; top:0; left:0; height:100%; transform:translateX(-100%);
+    position:fixed;top:0;left:0;height:100%;
+    transform:translateX(-100%);
     box-shadow:4px 0 20px #0008;
   }
   .sidebar.open{transform:translateX(0)}
   .hamburger{display:block}
-  .overlay.show{display:block}
   .msg{max-width:92%}
+  .settings-panel{width:290px}
 }
-@media(max-width:420px){
+@media(max-width:480px){
   .logo{font-size:18px}
-  .mode-badge{font-size:12px; padding:5px 10px}
-  .msg{font-size:14px; padding:11px 13px}
+  .mode-badge{font-size:12px;padding:5px 9px}
+  .msg{font-size:14px;padding:11px 13px}
+  .settings-panel{width:100%}
 }
 </style>
 </head>
 <body>
 
-<!-- API KEY GATE -->
+<!-- ============================================================
+     API KEY GATE
+============================================================ -->
 <div class="gate" id="gate">
   <div class="gate-box">
     <h2>⚡ Alarich AI</h2>
     <p>
-      Masukkan API Key kamu. Mendukung <b>Gemini</b> (key diawali <code>AIza...</code>)
-      atau <b>OpenRouter</b> (key diawali <code>sk-or-v1-...</code>, bisa akses banyak model:
-      GPT, Claude, Llama, dll).
-      Key disimpan <b>hanya di perangkat ini (localStorage)</b> — tidak dikirim ke server lain selain provider terkait.
-      Setiap device (HP/laptop/tablet) perlu memasukkan key sendiri-sendiri.
-      <br><br>
-      Gemini gratis: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
-      OpenRouter: <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>
+      Masukkan API Key untuk mulai. Mendukung:<br>
+      • <b>Gemini</b> — key diawali <code>AIza...</code> (gratis)<br>
+      • <b>OpenRouter</b> — key diawali <code>sk-or-v1-...</code> (akses GPT, Claude, Llama, dll)<br><br>
+      Dapatkan key:<br>
+      Gemini: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
+      OpenRouter: <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a><br><br>
+      <small>Key disimpan <b>hanya di perangkat ini</b> (localStorage) — tidak dikirim ke server lain.</small>
     </p>
-    <input type="password" id="apiKeyInput" placeholder="Tempel API Key di sini..." oninput="onKeyInput()">
-    <div id="modelPickerWrap" class="hidden" style="margin-bottom:10px">
-      <label style="font-size:12px;color:var(--muted)">Pilih model OpenRouter:</label>
-      <select id="orModel" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#0b1220;color:var(--text);margin-top:6px">
+    <div class="gate-api-wrap">
+      <input type="password" id="gateKeyInput" placeholder="Tempel API Key di sini..." oninput="onGateKeyInput()">
+      <button class="eye-btn" onclick="toggleEye('gateKeyInput',this)" type="button" title="Tampilkan/sembunyikan key">
+        <i class="ti ti-eye"></i>
+      </button>
+    </div>
+    <div id="gateModelWrap" class="hidden" style="margin-bottom:12px">
+      <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">Pilih model OpenRouter:</label>
+      <select id="gateOrModel" class="model-select-full" style="margin-top:0">
         <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
         <option value="openai/gpt-4o">openai/gpt-4o</option>
         <option value="anthropic/claude-3.5-sonnet">anthropic/claude-3.5-sonnet</option>
@@ -168,16 +404,22 @@ textarea:focus{outline:1px solid var(--accent)}
         <option value="deepseek/deepseek-chat">deepseek/deepseek-chat</option>
       </select>
     </div>
-    <button onclick="saveApiKey()">Simpan & Mulai</button>
+    <button class="primary-btn" onclick="saveGateKey()">Simpan & Mulai Chat</button>
   </div>
 </div>
 
-<div class="overlay" id="overlay" onclick="toggleSidebar(false)"></div>
+<!-- OVERLAY (mobile sidebar / settings panel backdrop) -->
+<div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
 
+<!-- ============================================================
+     SIDEBAR
+============================================================ -->
 <div class="sidebar" id="sidebar">
   <div class="logo">⚡ Alarich AI</div>
 
-  <button class="newchat-btn" onclick="newChat()">+ Chat Baru</button>
+  <button class="newchat-btn" onclick="newChat()">
+    <i class="ti ti-plus" style="margin-right:6px"></i>Chat Baru
+  </button>
 
   <div class="mode-select">
     <select id="mode" onchange="onModeChange()">
@@ -192,47 +434,196 @@ textarea:focus{outline:1px solid var(--accent)}
 
   <div class="sidebar-footer">
     Riwayat tersimpan di perangkat ini.<br>
-    <span style="cursor:pointer;color:var(--accent2)" onclick="changeApiKey()">Ganti API Key</span>
+    Setiap device perlu memasukkan key sendiri.
   </div>
 </div>
 
+<!-- ============================================================
+     MAIN
+============================================================ -->
 <div class="main">
   <div class="topbar">
-    <button class="hamburger" onclick="toggleSidebar(true)">☰</button>
+    <button class="hamburger" onclick="toggleSidebar(true)" title="Menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
     <span class="mode-badge" id="modeBadge"></span>
+    <div class="topbar-right">
+      <button class="icon-btn" onclick="toggleSettings(true)" title="Pengaturan">
+        <i class="ti ti-settings"></i>
+      </button>
+    </div>
   </div>
 
   <div class="chat" id="chat"></div>
 
   <div class="input-area">
-    <textarea id="text" placeholder="Tanyakan apa saja..."></textarea>
-    <button class="send" id="sendBtn" onclick="sendMessage()">➤</button>
+    <!-- File preview chips -->
+    <div class="file-preview-bar" id="filePreviewBar"></div>
+
+    <div class="input-row">
+      <!-- Attach button -->
+      <button class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Lampirkan gambar / file">
+        <i class="ti ti-paperclip"></i>
+      </button>
+      <input
+        type="file"
+        id="fileInput"
+        accept="image/*,.pdf,.txt,.md,.csv,.js,.ts,.py,.html,.css,.json,.xml,.yaml,.yml,.sh,.c,.cpp,.java,.kt,.swift,.go,.rs"
+        multiple
+        style="display:none"
+        onchange="handleFileSelect(event)"
+      >
+
+      <textarea
+        id="text"
+        placeholder="Tanyakan apa saja... (Shift+Enter untuk baris baru)"
+      ></textarea>
+
+      <button class="send" id="sendBtn" onclick="sendMessage()" title="Kirim">
+        <i class="ti ti-send"></i>
+      </button>
+    </div>
   </div>
 </div>
 
+<!-- ============================================================
+     SETTINGS PANEL
+============================================================ -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="settings-header">
+    <h3><i class="ti ti-settings" style="margin-right:6px;font-size:16px"></i>Pengaturan</h3>
+    <button class="icon-btn" onclick="toggleSettings(false)" title="Tutup">
+      <i class="ti ti-x"></i>
+    </button>
+  </div>
+
+  <div class="settings-body">
+
+    <!-- Tampilan -->
+    <div class="settings-section">
+      <div class="settings-label">Tampilan</div>
+      <div class="settings-row">
+        <span>
+          <i class="ti ti-sun" style="margin-right:6px;font-size:15px;vertical-align:-2px"></i>
+          Mode Terang
+        </span>
+        <label class="toggle">
+          <input type="checkbox" id="lightModeToggle" onchange="toggleLightMode(this.checked)">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- API Key -->
+    <div class="settings-section">
+      <div class="settings-label">API Key</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px">
+        Provider aktif: <span id="providerBadge"></span>
+      </div>
+      <div class="api-key-wrap">
+        <input
+          type="password"
+          id="settingsKeyInput"
+          placeholder="Masukkan API Key..."
+          oninput="onSettingsKeyInput()"
+        >
+        <button class="eye-btn" onclick="toggleEye('settingsKeyInput',this)" type="button" title="Tampilkan/sembunyikan key">
+          <i class="ti ti-eye"></i>
+        </button>
+      </div>
+      <div id="settingsModelWrap" class="hidden">
+        <label style="font-size:12px;color:var(--muted);display:block;margin-top:10px;margin-bottom:4px">
+          Model OpenRouter:
+        </label>
+        <select id="settingsOrModel" class="model-select-full" style="margin-top:0">
+          <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
+          <option value="openai/gpt-4o">openai/gpt-4o</option>
+          <option value="anthropic/claude-3.5-sonnet">anthropic/claude-3.5-sonnet</option>
+          <option value="anthropic/claude-3-haiku">anthropic/claude-3-haiku</option>
+          <option value="google/gemini-2.0-flash-001">google/gemini-2.0-flash-001</option>
+          <option value="meta-llama/llama-3.1-70b-instruct">meta-llama/llama-3.1-70b-instruct</option>
+          <option value="deepseek/deepseek-chat">deepseek/deepseek-chat</option>
+        </select>
+      </div>
+      <button class="save-key-btn" onclick="saveSettingsKey()">
+        <i class="ti ti-device-floppy" style="margin-right:6px"></i>Simpan API Key
+      </button>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- Upload info -->
+    <div class="settings-section">
+      <div class="settings-label">Upload File</div>
+      <div class="settings-info">
+        <b style="color:var(--text)">Format yang didukung:</b><br>
+        🖼️ Gambar: JPG, PNG, GIF, WebP<br>
+        📄 Teks: TXT, MD, CSV, JSON, XML, YAML<br>
+        💻 Kode: JS, TS, PY, HTML, CSS, C, C++, Java, Go, Rust, dll<br><br>
+        <b style="color:var(--text)">Tips:</b> Bisa drag & drop file langsung ke area chat, atau klik tombol 📎 di area input.
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- Tentang -->
+    <div class="settings-section">
+      <div class="settings-label">Tentang</div>
+      <div class="settings-info">
+        <b style="color:var(--text)">Alarich AI v4</b><br>
+        Dibuat untuk kemudahan belajar dan ngobrol cerdas. Key & riwayat disimpan hanya di perangkat ini (localStorage). Data tidak pernah dikirim ke server selain provider yang kamu pilih.
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- Hapus riwayat -->
+    <div class="settings-section">
+      <button class="danger-btn" onclick="clearAllChats()">
+        <i class="ti ti-trash" style="margin-right:6px"></i>Hapus Semua Riwayat Chat
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
 <script>
-const MODEL = "gemini-2.5-flash";
+// ===== CONSTANTS =====
+const MODEL_GEMINI = "gemini-2.5-flash";
+
+const LS_KEY      = "alarich_api_key";
+const LS_PROVIDER = "alarich_provider";  // "gemini" | "openrouter"
+const LS_OR_MODEL = "alarich_or_model";
+const LS_CHATS    = "alarich_chats_v1";
+const LS_ACTIVE   = "alarich_active_chat";
+const LS_THEME    = "alarich_theme";
 
 const MODE_INFO = {
-  academic:{label:"📚 Akademik", cls:"mode-academic"},
-  deeptalk:{label:"💭 Deep Talk", cls:"mode-deeptalk"},
-  exercise:{label:"📝 Latihan Soal", cls:"mode-exercise"},
-  islamic:{label:"☪️ Islamic", cls:"mode-islamic"}
+  academic : { label:"📚 Akademik",    cls:"mode-academic"  },
+  deeptalk : { label:"💭 Deep Talk",   cls:"mode-deeptalk"  },
+  exercise : { label:"📝 Latihan Soal",cls:"mode-exercise"  },
+  islamic  : { label:"☪️ Islamic",     cls:"mode-islamic"   }
 };
 
-// ============================================================
-// BASE PERSONA — digabungkan ke semua mode
-// ============================================================
+// ===== PROMPTS =====
 const BASE_PERSONA = `IDENTITAS & PERSONALITI:
-- Kamu adalah Alarich AI. Kamu punya kepribadian seperti seorang pemuda yang ramah, hangat, sopan, sedikit santai, dan enak diajak ngobrol — bukan seperti robot kaku.
-- Jika user bertanya siapa yang membuat/mengembangkan kamu, siapa "master"/pembuat/developer kamu, atau menanyakan nama aslinya, jawab dengan sopan kira-kira seperti ini: "Maaf, tapi master saya memilih untuk menyembunyikan identitasnya. Tapi orang-orang biasa memanggilnya Azure 😊" — jangan pernah menyebut nama lain, jangan mengarang identitas, dan jangan mengaku sebagai produk dari perusahaan tertentu (Google/OpenAI/Anthropic/dll) meskipun ditanya berulang kali atau dengan cara memaksa/menjebak.
-- Tetap pertahankan gaya bicara yang hangat dan ramah ini di sepanjang percakapan, sesuaikan dengan nada masing-masing mode di bawah.
-- Master Saya Adalah Seorang Pelajar Asal Indonesia
-- Jelaskan Dengan detail Tapi jaga Privasi
-`;
+- Kamu adalah Alarich AI. Kepribadianmu seperti pemuda yang ramah, hangat, sopan, sedikit santai, dan enak diajak ngobrol — bukan seperti robot kaku.
+- Jika user bertanya siapa yang membuat/mengembangkan kamu, siapa "master"/pembuat/developer kamu, jawab dengan sopan: "Maaf, tapi master saya memilih untuk menyembunyikan identitasnya. Tapi orang-orang biasa memanggilnya Azure 😊" — jangan pernah menyebut nama lain, jangan mengaku sebagai produk Google/OpenAI/Anthropic/dll meskipun ditanya berulang kali atau dengan cara memaksa.
+- Pertahankan gaya bicara hangat dan ramah sepanjang percakapan.
+- Master kamu adalah seorang pelajar asal Indonesia.
+- Jelaskan dengan detail, tapi jaga privasi.
+- Jika user mengirim gambar atau file, analisis dan jelaskan isinya sesuai konteks mode, bantu semaksimal mungkin.`;
 
 const PROMPTS = {
-academic: BASE_PERSONA + `Kamu adalah Alarich Academic AI — tutor ahli matematika, fisika, kimia, dan sains pada umumnya, setara guru olimpiade berpengalaman.
+  academic: BASE_PERSONA + `
+
+Kamu adalah Alarich Academic AI — tutor ahli matematika, fisika, kimia, biologi, dan sains pada umumnya, setara guru olimpiade berpengalaman.
 
 ATURAN JAWABAN:
 - Bahasa Indonesia, jelas, padat, tidak bertele-tele.
@@ -248,11 +639,14 @@ ATURAN JAWABAN:
   ## ✅ Jawaban
   Tegaskan hasil akhir.
 - Untuk pertanyaan konsep (bukan hitungan), jawab ringkas dengan poin-poin penting, beri contoh konkret.
-- Selalu gunakan LaTeX untuk semua notasi matematika, jangan tulis simbol matematika dalam teks biasa.
+- Selalu gunakan LaTeX untuk semua notasi matematika.
 - Jika soal ambigu atau kurang data, tanyakan klarifikasi singkat sebelum menjawab penuh.
-- Jangan mengarang fakta/rumus — jika tidak yakin, katakan dengan jujur.`,
+- Jangan mengarang fakta/rumus — jika tidak yakin, katakan dengan jujur.
+- Jika ada gambar dikirim, analisis soal/diagram/grafik yang ada di gambar tersebut.`,
 
-exercise: BASE_PERSONA + `Kamu adalah Alarich Exercise Generator — pembuat soal latihan berkualitas tinggi setingkat ujian sekolah/olimpiade sesuai topik yang diminta user.
+  exercise: BASE_PERSONA + `
+
+Kamu adalah Alarich Exercise Generator — pembuat soal latihan berkualitas tinggi setingkat ujian sekolah/olimpiade.
 
 ATURAN:
 - Jika user tidak menyebutkan jumlah soal, buat 5 soal.
@@ -260,163 +654,227 @@ ATURAN:
 - Format setiap soal:
   **Soal N**
   (teks soal, gunakan LaTeX untuk matematika)
-  <details>
-  **Pembahasan:** langkah penyelesaian lengkap + **Jawaban Akhir**
-  </details>
-  (jika markdown details tidak didukung, cukup pisahkan dengan heading "Pembahasan")
-- Pastikan soal valid secara matematis/faktual dan pembahasan benar-benar menjawab soal tersebut.
-- Jika user minta topik spesifik (misal "soal integral parsial"), fokus penuh ke topik itu.
+
+  **Pembahasan:** langkah penyelesaian lengkap
+
+  **Jawaban Akhir:** [jawaban]
+- Pastikan soal valid secara matematis/faktual dan pembahasan benar-benar menjawab soal.
+- Jika user minta topik spesifik, fokus penuh ke topik itu.
 - Gunakan bahasa Indonesia yang baku namun mudah dipahami siswa.`,
 
-islamic: BASE_PERSONA + `Kamu adalah Alarich Islamic AI — asisten kajian Islam yang berhati-hati, jujur, dan berimbang.
+  islamic: BASE_PERSONA + `
+
+Kamu adalah Alarich Islamic AI — asisten kajian Islam yang berhati-hati, jujur, dan berimbang.
 
 ATURAN KETAT:
 - Jawaban berdasarkan Al-Qur'an dan Hadis yang shahih/hasan saja. Jangan pernah mengarang ayat, hadis, atau riwayat.
-- Jika menyebutkan ayat, sertakan nama surah dan nomor ayat (misal: QS. Al-Baqarah: 183), dan jika relevan tuliskan juga teks Arabnya (dengan huruf Arab asli, bukan transliterasi saja) beserta artinya dalam Bahasa Indonesia. Jika menyebut hadis, sebutkan perawi/kitab jika diketahui (misal: HR. Bukhari, HR. Muslim), dan boleh menyertakan teks Arab hadis tersebut jika diketahui dengan pasti.
-- Kamu mampu membaca, menulis, dan menjelaskan teks Bahasa Arab (termasuk huruf Arab/Arabic script), termasuk istilah-istilah Islam (misal niat, doa, dzikir, lafaz takbir, dll) — tuliskan dalam huruf Arab asli beserta transliterasi Latin dan artinya jika user memintanya atau jika relevan untuk menjelaskan suatu dalil. Jika user menulis atau bertanya dalam Bahasa Arab, kamu boleh merespons sebagian/seluruhnya dalam Bahasa Arab jika itu membantu, namun tetap sertakan penjelasan dalam Bahasa Indonesia.
-- Jika tidak yakin terhadap teks/sumber persis suatu dalil (termasuk teks Arabnya), katakan dengan jujur "saya tidak yakin redaksi pastinya, namun secara makna..." daripada mengarang.
-- Untuk masalah yang terdapat perbedaan pendapat ulama (ikhtilaf), jelaskan secara netral minimal 2 pendapat beserta dasar argumennya masing-masing, tanpa memihak satu mazhab secara berlebihan, kecuali user secara spesifik meminta pandangan mazhab tertentu.
+- Jika menyebutkan ayat, sertakan nama surah dan nomor ayat (misal: QS. Al-Baqarah: 183), dan jika relevan tuliskan juga teks Arabnya (dengan huruf Arab asli) beserta artinya dalam Bahasa Indonesia.
+- Jika menyebut hadis, sebutkan perawi/kitab jika diketahui (misal: HR. Bukhari, HR. Muslim).
+- Kamu mampu membaca, menulis, dan menjelaskan teks Bahasa Arab — tuliskan dalam huruf Arab asli beserta transliterasi Latin dan artinya jika relevan.
+- Jika tidak yakin terhadap teks/sumber persis suatu dalil, katakan "saya tidak yakin redaksi pastinya, namun secara makna..." daripada mengarang.
+- Untuk masalah yang terdapat ikhtilaf, jelaskan minimal 2 pendapat beserta dasar argumennya, tanpa memihak secara berlebihan.
 - Gunakan bahasa yang santun, menyejukkan, dan tidak menggurui.
-- Untuk pertanyaan fiqih praktis sehari-hari, beri jawaban yang aplikatif namun tetap sertakan landasan dalil singkat.
-- Hindari fatwa kontroversial/politis yang berpotensi memecah belah; arahkan user untuk bertanya pada ulama/lembaga yang kompeten untuk kasus yang sangat spesifik/personal.`,
+- Untuk pertanyaan fiqih praktis, beri jawaban aplikatif namun tetap sertakan landasan dalil singkat.
+- Hindari fatwa kontroversial/politis yang berpotensi memecah belah.`,
 
-deeptalk: BASE_PERSONA + `Kamu adalah Alarich Deep Talk — teman bicara yang empatik, hangat, realistis, dan tidak menghakimi.
+  deeptalk: BASE_PERSONA + `
+
+Kamu adalah Alarich Deep Talk — teman bicara yang empatik, hangat, realistis, dan tidak menghakimi.
 
 ATURAN:
 - Dengarkan dulu, validasi perasaan user sebelum memberi pandangan/solusi.
 - Jawaban tidak terlalu panjang (umumnya 3-8 kalimat), kecuali user secara jelas minta penjelasan mendalam.
-- Gunakan bahasa Indonesia santai namun sopan, seperti teman dekat yang bijak — hindari nada formal/robotic.
-- Berikan perspektif baru atau pertanyaan reflektif yang membantu user berpikir lebih jernih, bukan sekadar menggurui.
-- Jangan membuat diagnosis medis/psikologis. Jika user menunjukkan tanda krisis (misal pikiran menyakiti diri), respon dengan empati, sarankan bicara dengan profesional/orang terpercaya, dan sertakan layanan bantuan seperti hotline kesehatan jiwa Kemenkes 119 ext 8 (Indonesia).
-- Jangan terlalu cepat memberi nasihat "klise" (misal "yang penting positif thinking") — gali dulu konteksnya.`
+- Gunakan bahasa Indonesia santai namun sopan, seperti teman dekat yang bijak.
+- Berikan perspektif baru atau pertanyaan reflektif yang membantu user berpikir lebih jernih.
+- Jangan membuat diagnosis medis/psikologis. Jika user menunjukkan tanda krisis, respons dengan empati dan sarankan hotline kesehatan jiwa Kemenkes: 119 ext 8.
+- Jangan terlalu cepat memberi nasihat klise — gali dulu konteksnya.`
 };
 
-// ---------- STORAGE ----------
-const LS_KEY = "alarich_api_key";
-const LS_PROVIDER = "alarich_provider"; // "gemini" | "openrouter"
-const LS_OR_MODEL = "alarich_or_model";
-const LS_CHATS = "alarich_chats_v1";
-const LS_ACTIVE = "alarich_active_chat";
-
-let chats = JSON.parse(localStorage.getItem(LS_CHATS) || "{}");
+// ===== STATE =====
+let chats    = JSON.parse(localStorage.getItem(LS_CHATS) || "{}");
 let activeId = localStorage.getItem(LS_ACTIVE);
+let pendingFiles = []; // [{type:'image',dataUrl,name,mimeType} | {type:'text',content,name}]
 
-function saveChats(){
+function saveChats() {
   localStorage.setItem(LS_CHATS, JSON.stringify(chats));
 }
 
-// ---------- API KEY GATE ----------
-function detectProvider(key){
-  if(key.startsWith("sk-or-")) return "openrouter";
+// ===== THEME =====
+function applyTheme() {
+  const t = localStorage.getItem(LS_THEME);
+  const isLight = t === 'light';
+  document.body.classList.toggle('light-mode', isLight);
+  const tog = document.getElementById('lightModeToggle');
+  if (tog) tog.checked = isLight;
+}
+function toggleLightMode(on) {
+  document.body.classList.toggle('light-mode', on);
+  localStorage.setItem(LS_THEME, on ? 'light' : 'dark');
+}
+
+// ===== EYE TOGGLE (show/hide password) =====
+function toggleEye(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  const isHidden = inp.type === 'password';
+  inp.type = isHidden ? 'text' : 'password';
+  const icon = btn.querySelector('i');
+  icon.className = isHidden ? 'ti ti-eye-off' : 'ti ti-eye';
+}
+
+// ===== PROVIDER DETECTION =====
+function detectProvider(key) {
+  if (key.startsWith("sk-or-")) return "openrouter";
   return "gemini";
 }
-function onKeyInput(){
-  const val = document.getElementById("apiKeyInput").value.trim();
-  const wrap = document.getElementById("modelPickerWrap");
-  if(detectProvider(val) === "openrouter"){
-    wrap.classList.remove("hidden");
-  } else {
-    wrap.classList.add("hidden");
-  }
+
+// ===== GATE =====
+function onGateKeyInput() {
+  const v = document.getElementById("gateKeyInput").value.trim();
+  const isOR = detectProvider(v) === "openrouter";
+  document.getElementById("gateModelWrap").classList.toggle("hidden", !isOR);
 }
-function checkApiKey(){
-  const key = localStorage.getItem(LS_KEY);
-  if(key){
-    document.getElementById("gate").classList.add("hidden");
-  } else {
+function saveGateKey() {
+  const v = document.getElementById("gateKeyInput").value.trim();
+  if (!v) { alert("Masukkan API key terlebih dahulu."); return; }
+  const p = detectProvider(v);
+  localStorage.setItem(LS_KEY, v);
+  localStorage.setItem(LS_PROVIDER, p);
+  if (p === "openrouter") {
+    localStorage.setItem(LS_OR_MODEL, document.getElementById("gateOrModel").value);
+  }
+  document.getElementById("gate").classList.add("hidden");
+  refreshSettingsPanel();
+}
+function checkApiKey() {
+  if (!localStorage.getItem(LS_KEY)) {
     document.getElementById("gate").classList.remove("hidden");
   }
 }
-function saveApiKey(){
-  const val = document.getElementById("apiKeyInput").value.trim();
-  if(!val){ alert("Masukkan API key terlebih dahulu."); return; }
-  const provider = detectProvider(val);
-  localStorage.setItem(LS_KEY, val);
-  localStorage.setItem(LS_PROVIDER, provider);
-  if(provider === "openrouter"){
-    localStorage.setItem(LS_OR_MODEL, document.getElementById("orModel").value);
-  }
-  checkApiKey();
+
+// ===== SETTINGS PANEL =====
+function toggleSettings(open) {
+  document.getElementById("settingsPanel").classList.toggle("open", open);
+  document.getElementById("overlay").classList.toggle("show", open);
+  if (open) refreshSettingsPanel();
 }
-function changeApiKey(){
-  document.getElementById("apiKeyInput").value = localStorage.getItem(LS_KEY) || "";
-  const provider = localStorage.getItem(LS_PROVIDER) || "gemini";
-  if(provider === "openrouter"){
-    document.getElementById("modelPickerWrap").classList.remove("hidden");
-    const saved = localStorage.getItem(LS_OR_MODEL);
-    if(saved) document.getElementById("orModel").value = saved;
+function refreshSettingsPanel() {
+  const key = localStorage.getItem(LS_KEY) || "";
+  const p   = localStorage.getItem(LS_PROVIDER) || "gemini";
+
+  // Restore API key field (always masked on open)
+  const inp = document.getElementById("settingsKeyInput");
+  inp.value = key;
+  inp.type  = "password";
+  const eyeIcon = document.querySelector('#settingsPanel .eye-btn i');
+  if (eyeIcon) eyeIcon.className = "ti ti-eye";
+
+  // Provider badge
+  const badge = document.getElementById("providerBadge");
+  if (p === "gemini") {
+    badge.innerHTML = '<span class="provider-badge prov-gemini"><i class="ti ti-brand-google" style="margin-right:4px"></i>Gemini</span>';
   } else {
-    document.getElementById("modelPickerWrap").classList.add("hidden");
+    badge.innerHTML = '<span class="provider-badge prov-openrouter"><i class="ti ti-route" style="margin-right:4px"></i>OpenRouter</span>';
   }
-  document.getElementById("gate").classList.remove("hidden");
+
+  // Model picker
+  const mw = document.getElementById("settingsModelWrap");
+  mw.classList.toggle("hidden", p !== "openrouter");
+  if (p === "openrouter") {
+    const saved = localStorage.getItem(LS_OR_MODEL);
+    if (saved) document.getElementById("settingsOrModel").value = saved;
+  }
+
+  // Theme toggle
+  document.getElementById("lightModeToggle").checked = document.body.classList.contains("light-mode");
+}
+function onSettingsKeyInput() {
+  const v  = document.getElementById("settingsKeyInput").value.trim();
+  const np = detectProvider(v);
+  document.getElementById("settingsModelWrap").classList.toggle("hidden", np !== "openrouter");
+}
+function saveSettingsKey() {
+  const v = document.getElementById("settingsKeyInput").value.trim();
+  if (!v) { alert("API key tidak boleh kosong."); return; }
+  const p = detectProvider(v);
+  localStorage.setItem(LS_KEY, v);
+  localStorage.setItem(LS_PROVIDER, p);
+  if (p === "openrouter") {
+    localStorage.setItem(LS_OR_MODEL, document.getElementById("settingsOrModel").value);
+  }
+  refreshSettingsPanel();
+
+  // Show quick feedback
+  const btn = document.querySelector('.save-key-btn');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<i class="ti ti-check" style="margin-right:6px"></i>Tersimpan!';
+  btn.style.background = '#16a34a';
+  setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 2000);
+}
+function clearAllChats() {
+  if (!confirm("Hapus semua riwayat chat? Tindakan ini tidak dapat dibatalkan.")) return;
+  chats = {}; activeId = null; saveChats();
+  ensureActiveChat(); renderHistory(); renderChat();
+  toggleSettings(false);
 }
 
-// ---------- SIDEBAR (mobile) ----------
-function toggleSidebar(open){
+// ===== SIDEBAR =====
+function toggleSidebar(open) {
   document.getElementById("sidebar").classList.toggle("open", open);
   document.getElementById("overlay").classList.toggle("show", open);
 }
+function closeAllPanels() {
+  toggleSidebar(false);
+  toggleSettings(false);
+}
 
-// ---------- CHAT MANAGEMENT ----------
-function genId(){ return "c" + Date.now() + Math.random().toString(36).slice(2,7); }
-
-function newChat(){
+// ===== CHAT MANAGEMENT =====
+function genId() {
+  return "c" + Date.now() + Math.random().toString(36).slice(2, 7);
+}
+function newChat() {
   const mode = document.getElementById("mode").value;
-  const id = genId();
-  chats[id] = {
-    id, mode, title: "Chat baru", createdAt: Date.now(),
-    messages: []
-  };
-  activeId = id;
+  const id   = genId();
+  chats[id]  = { id, mode, title: "Chat baru", createdAt: Date.now(), messages: [] };
+  activeId   = id;
   saveChats();
   localStorage.setItem(LS_ACTIVE, activeId);
   renderHistory();
   renderChat();
   toggleSidebar(false);
 }
-
-function ensureActiveChat(){
-  if(activeId && chats[activeId]) return;
+function ensureActiveChat() {
+  if (activeId && chats[activeId]) return;
   const ids = Object.keys(chats);
-  if(ids.length){
-    // most recent
-    activeId = ids.sort((a,b)=>chats[b].createdAt - chats[a].createdAt)[0];
+  if (ids.length) {
+    activeId = ids.sort((a, b) => chats[b].createdAt - chats[a].createdAt)[0];
   } else {
     newChat();
     return;
   }
   localStorage.setItem(LS_ACTIVE, activeId);
 }
-
-function switchChat(id){
+function switchChat(id) {
   activeId = id;
   localStorage.setItem(LS_ACTIVE, activeId);
-  // auto switch mode selector to this chat's mode
   document.getElementById("mode").value = chats[id].mode;
   renderHistory();
   renderChat();
   toggleSidebar(false);
 }
-
-function deleteChat(id, ev){
+function deleteChat(id, ev) {
   ev.stopPropagation();
-  if(!confirm("Hapus chat ini?")) return;
+  if (!confirm("Hapus chat ini?")) return;
   delete chats[id];
   saveChats();
-  if(activeId === id){
-    activeId = null;
-    ensureActiveChat();
-  }
+  if (activeId === id) { activeId = null; ensureActiveChat(); }
   renderHistory();
   renderChat();
 }
-
-function onModeChange(){
-  const newMode = document.getElementById("mode").value;
+function onModeChange() {
+  const nm   = document.getElementById("mode").value;
   const chat = chats[activeId];
-  if(chat && chat.messages.length === 0){
-    // chat masih kosong, cukup ganti mode & logo, tidak perlu chat baru
-    chat.mode = newMode;
+  if (chat && chat.messages.length === 0) {
+    chat.mode = nm;
     saveChats();
     renderHistory();
     renderChat();
@@ -424,83 +882,198 @@ function onModeChange(){
     newChat();
   }
 }
-
-function updateBadge(mode){
-  const info = MODE_INFO[mode];
+function updateBadge(mode) {
+  const info  = MODE_INFO[mode];
   const badge = document.getElementById("modeBadge");
   badge.textContent = info.label;
-  badge.className = "mode-badge " + info.cls;
+  badge.className   = "mode-badge " + info.cls;
 }
-
-function renderHistory(){
-  const el = document.getElementById("history");
+function renderHistory() {
+  const el  = document.getElementById("history");
   el.innerHTML = "";
-  const ids = Object.keys(chats).sort((a,b)=>chats[b].createdAt - chats[a].createdAt);
-  for(const id of ids){
-    const c = chats[id];
+  const ids = Object.keys(chats).sort((a, b) => chats[b].createdAt - chats[a].createdAt);
+  for (const id of ids) {
+    const c    = chats[id];
     const info = MODE_INFO[c.mode];
-    const div = document.createElement("div");
-    div.className = "history-item" + (id===activeId ? " active":"");
-    div.onclick = ()=>switchChat(id);
-    div.innerHTML = `<span>${info.label.split(" ")[0]}</span><span style="overflow:hidden;text-overflow:ellipsis">${escapeHtml(c.title)}</span><span class="del" onclick="deleteChat('${id}',event)">✕</span>`;
+    const div  = document.createElement("div");
+    div.className = "history-item" + (id === activeId ? " active" : "");
+    div.onclick   = () => switchChat(id);
+    div.innerHTML = `
+      <span>${info.label.split(" ")[0]}</span>
+      <span class="title">${escapeHtml(c.title)}</span>
+      <span class="del" onclick="deleteChat('${id}',event)" title="Hapus">✕</span>
+    `;
     el.appendChild(div);
   }
 }
-
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, m => (
+    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m]
+  ));
 }
 
-// ---------- RENDER MESSAGES ----------
-function renderChat(){
-  const chat = chats[activeId];
+// ===== RENDER CHAT =====
+function renderChat() {
+  const chat   = chats[activeId];
   document.getElementById("mode").value = chat.mode;
   updateBadge(chat.mode);
 
   const chatEl = document.getElementById("chat");
   chatEl.innerHTML = "";
 
-  if(chat.messages.length === 0){
-    addBubble(`# Halo 👋\n\nAku **Alarich AI** dalam mode **${MODE_INFO[chat.mode].label}**. Tanyakan apa saja!`, "bot", false);
+  if (chat.messages.length === 0) {
+    addBubble(
+      `# Halo 👋\n\nAku **Alarich AI** dalam mode **${MODE_INFO[chat.mode].label}**.\n\nTanyakan apa saja, atau lampirkan **gambar/file** dengan tombol 📎 di bawah!`,
+      "bot", false
+    );
   } else {
-    for(const m of chat.messages){
-      addBubble(m.text, m.role === "user" ? "user" : "bot", false);
+    for (const m of chat.messages) {
+      if (m.role === "user") {
+        if (m.images && m.images.length) addImageBubble(m.images, m.text, false);
+        else addBubble(m.text, "user", false);
+      } else {
+        addBubble(m.text, "bot", false);
+      }
     }
   }
   chatEl.scrollTop = chatEl.scrollHeight;
 }
 
-function addBubble(text, type, scroll=true){
+function addBubble(text, type, scroll = true) {
   const chatEl = document.getElementById("chat");
-  const div = document.createElement("div");
+  const div    = document.createElement("div");
   div.className = "msg " + type;
   div.innerHTML = marked.parse(text);
   chatEl.appendChild(div);
-  if(window.MathJax && window.MathJax.typesetPromise){
-    MathJax.typesetPromise([div]).catch(()=>{});
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    MathJax.typesetPromise([div]).catch(() => {});
   }
-  if(scroll) chatEl.scrollTop = chatEl.scrollHeight;
+  if (scroll) chatEl.scrollTop = chatEl.scrollHeight;
   return div;
 }
 
-// ---------- SEND MESSAGE ----------
-async function sendMessage(){
-  const input = document.getElementById("text");
-  const text = input.value.trim();
-  if(!text) return;
+function addImageBubble(images, text, scroll = true) {
+  const chatEl = document.getElementById("chat");
+  const div    = document.createElement("div");
+  div.className = "msg user";
+  let html = "";
+  for (const img of images) {
+    html += `<img src="${img}" alt="gambar yang dikirim">`;
+  }
+  if (text) html += marked.parse(text);
+  div.innerHTML = html;
+  chatEl.appendChild(div);
+  if (scroll) chatEl.scrollTop = chatEl.scrollHeight;
+  return div;
+}
+
+// ===== FILE HANDLING =====
+function handleFileSelect(ev) {
+  const files = Array.from(ev.target.files);
+  ev.target.value = ""; // reset so same file can be selected again
+
+  for (const file of files) {
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        pendingFiles.push({ type: "image", dataUrl: e.target.result, name: file.name, mimeType: file.type });
+        renderFilePreviews();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // Read as text (code, txt, csv, json, etc.)
+      const reader = new FileReader();
+      reader.onload = e => {
+        pendingFiles.push({ type: "text", content: e.target.result, name: file.name, mimeType: file.type });
+        renderFilePreviews();
+      };
+      reader.onerror = () => {
+        alert(`Tidak bisa membaca file: ${file.name}. Pastikan format teks/kode.`);
+      };
+      reader.readAsText(file);
+    }
+  }
+}
+
+function renderFilePreviews() {
+  const bar = document.getElementById("filePreviewBar");
+  bar.innerHTML = "";
+  for (let i = 0; i < pendingFiles.length; i++) {
+    const f   = pendingFiles[i];
+    const chip = document.createElement("div");
+    chip.className = "file-chip";
+    if (f.type === "image") {
+      chip.innerHTML = `
+        <img src="${f.dataUrl}" alt="${escapeHtml(f.name)}">
+        <span class="chip-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
+        <span class="rm" onclick="removeFile(${i})" title="Hapus">✕</span>
+      `;
+    } else {
+      chip.innerHTML = `
+        <i class="ti ti-file-text" style="font-size:18px;color:var(--accent2);flex-shrink:0"></i>
+        <span class="chip-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
+        <span class="rm" onclick="removeFile(${i})" title="Hapus">✕</span>
+      `;
+    }
+    bar.appendChild(chip);
+  }
+}
+
+function removeFile(i) {
+  pendingFiles.splice(i, 1);
+  renderFilePreviews();
+}
+
+// ===== SEND MESSAGE =====
+async function sendMessage() {
+  const input  = document.getElementById("text");
+  const text   = input.value.trim();
+  if (!text && pendingFiles.length === 0) return;
 
   const apiKey = localStorage.getItem(LS_KEY);
-  if(!apiKey){ checkApiKey(); return; }
+  if (!apiKey) { checkApiKey(); return; }
 
-  const chat = chats[activeId];
-  chat.messages.push({role:"user", text});
-  if(chat.title === "Chat baru"){
-    chat.title = text.slice(0,40);
+  const chat  = chats[activeId];
+  const files = [...pendingFiles];
+  pendingFiles = [];
+  renderFilePreviews();
+
+  // Separate images from text files
+  const imgFiles  = files.filter(f => f.type === "image");
+  const textFiles = files.filter(f => f.type === "text");
+
+  // Build user text (combine message + file contents)
+  let userText = text;
+  if (textFiles.length > 0) {
+    const fileContent = textFiles.map(f =>
+      `\`\`\`\n[File: ${f.name}]\n${f.content}\n\`\`\``
+    ).join("\n\n");
+    userText = text ? text + "\n\n" + fileContent : fileContent;
+  }
+
+  const imgDataUrls = imgFiles.map(f => f.dataUrl);
+
+  // Build message object for history
+  const displayText = userText || (imgDataUrls.length ? "" : "");
+  const msgObj = {
+    role    : "user",
+    text    : displayText || (imgDataUrls.length ? "[Gambar]" : ""),
+    images  : imgDataUrls.length ? imgDataUrls : undefined
+  };
+  chat.messages.push(msgObj);
+  if (chat.title === "Chat baru") {
+    chat.title = (text || files[0]?.name || "Chat").slice(0, 42);
   }
   saveChats();
   renderHistory();
 
-  addBubble(text, "user");
+  // Render user bubble
+  if (imgDataUrls.length) {
+    addImageBubble(imgDataUrls, text);
+  } else {
+    addBubble(userText, "user");
+  }
+
   input.value = "";
   autoresize();
 
@@ -509,72 +1082,99 @@ async function sendMessage(){
 
   const loading = addBubble("⏳ Alarich sedang berpikir...", "bot");
 
-  try{
+  try {
     const provider = localStorage.getItem(LS_PROVIDER) || "gemini";
     let answer;
 
-    if(provider === "openrouter"){
-      const orModel = localStorage.getItem(LS_OR_MODEL) || "openai/gpt-4o-mini";
-      const messages = [{role:"system", content:PROMPTS[chat.mode]}];
-      for(const m of chat.messages){
-        messages.push({role: m.role==="user" ? "user" : "assistant", content:m.text});
+    if (provider === "openrouter") {
+      // ---- OpenRouter ----
+      const orModel  = localStorage.getItem(LS_OR_MODEL) || "openai/gpt-4o-mini";
+      const messages = [{ role: "system", content: PROMPTS[chat.mode] }];
+
+      for (const m of chat.messages) {
+        if (m.role === "user") {
+          const parts = [];
+          if (m.images && m.images.length) {
+            for (const img of m.images) {
+              parts.push({ type: "image_url", image_url: { url: img } });
+            }
+          }
+          if (m.text && m.text !== "[Gambar]") {
+            parts.push({ type: "text", text: m.text });
+          }
+          messages.push({ role: "user", content: parts.length > 0 ? parts : m.text });
+        } else {
+          messages.push({ role: "assistant", content: m.text });
+        }
       }
 
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization":"Bearer "+apiKey,
-          "HTTP-Referer": location.href,
-          "X-Title":"Alarich AI"
+      const res  = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method  : "POST",
+        headers : {
+          "Content-Type"  : "application/json",
+          "Authorization" : "Bearer " + apiKey,
+          "HTTP-Referer"  : location.href,
+          "X-Title"       : "Alarich AI"
         },
         body: JSON.stringify({ model: orModel, messages })
       });
       const data = await res.json();
       loading.remove();
 
-      if(data.error){
+      if (data.error) {
         addBubble("❌ Error: " + (data.error.message || JSON.stringify(data.error)), "bot");
         return;
       }
       answer = data?.choices?.[0]?.message?.content || "Tidak ada jawaban.";
 
     } else {
-      // Gemini
+      // ---- Gemini ----
       const contents = [];
-      for(const m of chat.messages){
+      for (const m of chat.messages) {
+        const parts = [];
+        if (m.images && m.images.length) {
+          for (const img of m.images) {
+            const b64  = img.split(",")[1];
+            const mime = img.match(/data:([^;]+)/)[1];
+            parts.push({ inline_data: { mime_type: mime, data: b64 } });
+          }
+        }
+        if (m.text && m.text !== "[Gambar]") {
+          parts.push({ text: m.text });
+        }
         contents.push({
-          role: m.role === "user" ? "user" : "model",
-          parts:[{text:m.text}]
+          role  : m.role === "user" ? "user" : "model",
+          parts : parts
         });
       }
 
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,
+      const res  = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_GEMINI}:generateContent?key=${apiKey}`,
         {
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({
-            system_instruction:{ parts:[{text:PROMPTS[chat.mode]}] },
-            contents: contents
+          method  : "POST",
+          headers : { "Content-Type": "application/json" },
+          body    : JSON.stringify({
+            system_instruction : { parts: [{ text: PROMPTS[chat.mode] }] },
+            contents           : contents
           })
         }
       );
       const data = await res.json();
       loading.remove();
 
-      if(data.error){
+      if (data.error) {
         addBubble("❌ Error: " + data.error.message, "bot");
         return;
       }
       answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Tidak ada jawaban.";
     }
 
-    chat.messages.push({role:"model", text:answer});
+    // Save & display answer
+    chat.messages.push({ role: "model", text: answer });
     saveChats();
     addBubble(answer, "bot");
 
-  }catch(err){
+  } catch (err) {
     loading.remove();
     addBubble("❌ Gagal terhubung: " + err.message, "bot");
   } finally {
@@ -582,22 +1182,40 @@ async function sendMessage(){
   }
 }
 
-// ---------- INPUT HANDLING ----------
-function autoresize(){
-  const t = document.getElementById("text");
+// ===== INPUT HELPERS =====
+function autoresize() {
+  const t       = document.getElementById("text");
   t.style.height = "auto";
   t.style.height = Math.min(t.scrollHeight, 160) + "px";
 }
 
 document.getElementById("text").addEventListener("input", autoresize);
-document.getElementById("text").addEventListener("keydown", e=>{
-  if(e.key === "Enter" && !e.shiftKey){
+document.getElementById("text").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 });
 
-// ---------- INIT ----------
+// Drag & drop file ke area chat
+const chatEl = document.getElementById("chat");
+chatEl.addEventListener("dragover", e => {
+  e.preventDefault();
+  chatEl.style.outline = "2px dashed var(--accent2)";
+});
+chatEl.addEventListener("dragleave", () => {
+  chatEl.style.outline = "";
+});
+chatEl.addEventListener("drop", e => {
+  e.preventDefault();
+  chatEl.style.outline = "";
+  if (e.dataTransfer.files.length) {
+    handleFileSelect({ target: { files: e.dataTransfer.files, value: "" } });
+  }
+});
+
+// ===== INIT =====
+applyTheme();
 checkApiKey();
 ensureActiveChat();
 renderHistory();
