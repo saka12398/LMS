@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>✨ LMS Kuy | Belajar Cepat & Seru | UTER Edition ✨</title>
+    <title>✨ LMS Stellar | TKA + UTER | Constellation Edition ✨</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -876,6 +876,86 @@
             50%  { box-shadow: 0 0 0 20px rgba(74,158,255,0), 0 0 60px rgba(74,158,255,0.5); transform: scale(1.02); }
             100% { box-shadow: 0 0 30px rgba(74,158,255,0.2), 0 0 60px rgba(155,89,255,0.1); transform: scale(1); }
         }
+
+        /* ===== ALARICH FLOATING BUDDY ===== */
+        #alarich-buddy {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            font-family: 'Raleway', sans-serif;
+        }
+        .alarich-avatar {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--nebula-blue), var(--nebula-purple));
+            border: 1px solid rgba(74,158,255,0.35);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(74,158,255,0.3), 0 0 40px rgba(155,89,255,0.15);
+            animation: buddyFloat 4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes buddyFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .alarich-bubble {
+            max-width: 230px;
+            background: linear-gradient(145deg, rgba(13,27,75,0.92), rgba(6,3,24,0.95));
+            border: 1px solid rgba(74,158,255,0.25);
+            border-radius: 18px;
+            padding: 12px 16px;
+            color: var(--star-white);
+            font-size: 0.78rem;
+            line-height: 1.5;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.6), 0 0 20px rgba(74,158,255,0.1);
+            position: relative;
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1);
+            pointer-events: none;
+        }
+        .alarich-bubble.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .alarich-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 18px; right: -7px;
+            width: 14px; height: 14px;
+            background: rgba(13,27,75,0.92);
+            border-right: 1px solid rgba(74,158,255,0.25);
+            border-top: 1px solid rgba(74,158,255,0.25);
+            transform: rotate(45deg);
+        }
+        .alarich-bubble strong {
+            color: var(--aurora-cyan);
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            letter-spacing: 0.04em;
+        }
+        .alarich-bubble .alarich-close {
+            position: absolute;
+            top: 6px; right: 8px;
+            cursor: pointer;
+            color: rgba(184,200,240,0.4);
+            font-size: 0.7rem;
+        }
+        .alarich-bubble .alarich-close:hover { color: var(--aurora-cyan); }
+        @media (max-width: 640px) {
+            #alarich-buddy { bottom: 14px; right: 14px; }
+            .alarich-avatar { width: 48px; height: 48px; font-size: 22px; }
+            .alarich-bubble { max-width: 180px; font-size: 0.72rem; }
+        }
     </style>
 </head>
 <body>
@@ -961,7 +1041,17 @@
 
     <div class="footer scroll-reveal">
         <p>© 2025 LMS SMP · TKA (Matematika &amp; Bahasa Indonesia) + UTER (MTK Lanjut &amp; IPA)</p>
-        <p style="margin-top:8px;opacity:0.5">✦ E-Book Lengkap · Latihan &amp; Pembahasan · Test Olimpiade &amp; UTER ✦</p>
+        <p style="margin-top:8px;opacity:0.5">✦ E-Book Lengkap · Latihan &amp; Pembahasan · Test Olimpiade &amp; UTER | by-rich ✦</p>
+    </div>
+</div>
+
+<!-- ALARICH FLOATING BUDDY -->
+<div id="alarich-buddy">
+    <div class="alarich-avatar" id="alarichAvatar" title="Chat dengan Alarich AI" style="order:2">🤖</div>
+    <div class="alarich-bubble" id="alarichBubble" style="order:1">
+        <span class="alarich-close" id="alarichClose">✕</span>
+        <strong>Alarich AI</strong>
+        <span id="alarichText">Hai! Aku Alarich, si AI ala Richula 👋</span>
     </div>
 </div>
 
@@ -1444,6 +1534,61 @@ Object.entries(cards).forEach(([id, card]) => {
         showPanel(id);
     });
 });
+
+// ========== ALARICH FLOATING BUDDY ==========
+(function(){
+    const bubble = document.getElementById('alarichBubble');
+    const textEl = document.getElementById('alarichText');
+    const avatar = document.getElementById('alarichAvatar');
+    const closeBtn = document.getElementById('alarichClose');
+
+    const greetings = [
+        "Hai! Aku Alarich, si AI ala Richula 👋",
+        "Udah pilih mata pelajaran belum? Yuk mulai latihan! 🚀",
+        "Tips: kerjain mode Latihan dulu sebelum coba Test ⏱️",
+        "Semangat belajarnya ya, kamu pasti bisa! ⭐",
+        "Klik salah satu kartu di atas buat mulai latihan TKA/UTER 📚",
+        "Jangan lupa cek E-Book buat rumus cepat & trik olimpiade 📘"
+    ];
+    let idx = 0;
+    let autoTimer = null;
+    let userDismissed = false;
+
+    function showBubble(text) {
+        textEl.textContent = text;
+        bubble.classList.add('show');
+    }
+    function hideBubble() {
+        bubble.classList.remove('show');
+    }
+
+    function cycleMessage() {
+        if (userDismissed) return;
+        idx = (idx + 1) % greetings.length;
+        showBubble(greetings[idx]);
+        setTimeout(hideBubble, 6000); // bubble visible for 6s
+    }
+
+    // Initial greeting after short delay
+    setTimeout(() => {
+        showBubble(greetings[0]);
+        setTimeout(hideBubble, 6000);
+    }, 1500);
+
+    // Periodic, non-spammy: every 45 seconds
+    autoTimer = setInterval(cycleMessage, 45000);
+
+    avatar.addEventListener('click', () => {
+        window.location.href = 'alarich-ai.html';
+    });
+
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hideBubble();
+        userDismissed = true;
+        setTimeout(() => { userDismissed = false; }, 60000); // re-allow after 1 min
+    });
+})();
 </script>
 </body>
 </html>
