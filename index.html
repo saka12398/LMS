@@ -23,6 +23,76 @@
             --glow-blue: rgba(74,158,255,0.4);
             --glow-purple: rgba(155,89,255,0.3);
             --glow-cyan: rgba(0,212,255,0.3);
+            
+            /* Light mode variables */
+            --bg-light: #f0f4ff;
+            --card-light: rgba(255,255,255,0.85);
+            --text-light: #1a1a2e;
+            --text-muted-light: #4a5568;
+            --border-light: rgba(0,0,0,0.1);
+        }
+
+        /* Light mode class */
+        body.light-mode {
+            background: var(--bg-light);
+        }
+        body.light-mode .main-container .header h1 {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.light-mode .subject-card {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+        }
+        body.light-mode .subject-card h2,
+        body.light-mode .subject-desc,
+        body.light-mode .mode-item h4,
+        body.light-mode .mode-desc,
+        body.light-mode .mode-features li,
+        body.light-mode .footer {
+            color: var(--text-light);
+        }
+        body.light-mode .subject-desc,
+        body.light-mode .mode-desc,
+        body.light-mode .mode-features li {
+            color: var(--text-muted-light);
+        }
+        body.light-mode .mode-panel {
+            background: rgba(255,255,255,0.95);
+            border: 1px solid var(--border-light);
+        }
+        body.light-mode .mode-item {
+            background: rgba(0,0,0,0.03);
+            border-color: rgba(0,0,0,0.08);
+        }
+        body.light-mode .mode-item:hover {
+            background: rgba(74,158,255,0.1);
+            border-color: var(--aurora-blue);
+        }
+        body.light-mode .close-panel-btn {
+            background: rgba(0,0,0,0.05);
+            color: #2d3748;
+        }
+        body.light-mode .alarich-bubble {
+            background: white;
+            color: #2d3748;
+            border-color: var(--aurora-blue);
+        }
+        body.light-mode .alarich-bubble::after {
+            background: white;
+            border-color: var(--aurora-blue);
+        }
+        body.light-mode .alarich-avatar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        body.light-mode .divider-line {
+            background: linear-gradient(90deg, transparent, #4a9eff, transparent);
+        }
+        body.light-mode .nebula-layer,
+        body.light-mode .aurora,
+        body.light-mode #cosmos-canvas {
+            opacity: 0.3;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,6 +103,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            transition: background 0.4s ease, color 0.3s ease;
         }
 
         /* ===== COSMIC CANVAS ===== */
@@ -127,6 +198,102 @@
             transform-origin: right center;
         }
 
+        /* ===== FLOATING MENU (POJOK KIRI) ===== */
+        .floating-menu {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .menu-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 28px;
+            background: linear-gradient(145deg, rgba(13,27,75,0.85), rgba(6,3,24,0.95));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(74,158,255,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2,0.9,0.4,1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 15px rgba(74,158,255,0.2);
+            color: var(--star-white);
+        }
+        .menu-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            border-color: var(--aurora-cyan);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 20px rgba(74,158,255,0.4);
+        }
+        .menu-btn:active {
+            transform: scale(0.96);
+        }
+        body.light-mode .menu-btn {
+            background: rgba(255,255,255,0.85);
+            color: #2d3748;
+            border-color: var(--aurora-blue);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        body.light-mode .menu-btn:hover {
+            background: white;
+            border-color: var(--aurora-blue);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Settings dropdown */
+        .settings-dropdown {
+            position: absolute;
+            bottom: 65px;
+            left: 0;
+            background: linear-gradient(145deg, rgba(13,27,75,0.95), rgba(6,3,24,0.98));
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(74,158,255,0.3);
+            border-radius: 20px;
+            padding: 8px 0;
+            min-width: 150px;
+            display: none;
+            flex-direction: column;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .settings-dropdown.show {
+            display: flex;
+        }
+        .settings-dropdown a, .settings-dropdown div {
+            padding: 10px 20px;
+            color: var(--star-silver);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .settings-dropdown a:hover, .settings-dropdown div:hover {
+            background: rgba(74,158,255,0.2);
+            color: var(--aurora-cyan);
+        }
+        body.light-mode .settings-dropdown {
+            background: rgba(255,255,255,0.95);
+            border-color: var(--aurora-blue);
+            color: #2d3748;
+        }
+        body.light-mode .settings-dropdown a,
+        body.light-mode .settings-dropdown div {
+            color: #2d3748;
+        }
+        body.light-mode .settings-dropdown a:hover,
+        body.light-mode .settings-dropdown div:hover {
+            background: rgba(74,158,255,0.15);
+            color: #1e3c72;
+        }
+
         /* ===== MAIN LAYOUT ===== */
         .main-container {
             max-width: 1200px;
@@ -176,7 +343,6 @@
             50% { box-shadow: 0 0 50px rgba(74,158,255,0.5), 0 0 80px rgba(0,212,255,0.2); transform: translateY(-6px); }
         }
 
-        /* Orbiting dots */
         .orbit-ring {
             position: absolute;
             top: 50%; left: 50%;
@@ -303,7 +469,6 @@
             transition: opacity 0.5s;
         }
 
-        /* Glow sweep on hover */
         .subject-card::after {
             content: '';
             position: absolute;
@@ -440,7 +605,6 @@
             to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
         }
 
-        /* Card ripple burst on click */
         .card-ripple {
             position: absolute;
             border-radius: 50%;
@@ -448,59 +612,24 @@
             transform: scale(0);
             animation: rippleBurst 0.7s cubic-bezier(0.2,0.9,0.4,1) forwards;
             pointer-events: none;
-            z-index: 5;
+            z-index: 20;
         }
         @keyframes rippleBurst {
             0%   { transform: scale(0); opacity: 1; }
-            60%  { opacity: 0.6; }
+            60%  { opacity: 0.5; }
             100% { transform: scale(3.5); opacity: 0; }
         }
-
-        /* Star burst particles on click */
         .star-particle {
             position: absolute;
-            width: 4px; height: 4px;
+            width: 5px; height: 5px;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 6;
+            z-index: 21;
             animation: starShoot var(--dur, 0.6s) ease-out forwards;
         }
         @keyframes starShoot {
-            0%   { transform: translate(0,0) scale(1); opacity: 1; }
+            0%   { transform: translate(0,0) scale(1.2); opacity: 1; }
             100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
-
-        /* Panel header reveal */
-        .panel-header {
-            animation: slideDown 0.5s cubic-bezier(0.2,0.9,0.4,1) both;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-15px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Mode items stagger in */
-        .mode-item {
-            opacity: 0;
-            animation: modeReveal 0.5s cubic-bezier(0.2,0.9,0.4,1) both;
-        }
-        .mode-item:nth-child(1) { animation-delay: 0.12s; }
-        .mode-item:nth-child(2) { animation-delay: 0.22s; }
-        .mode-item:nth-child(3) { animation-delay: 0.32s; }
-
-        @keyframes modeReveal {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); filter: blur(4px); }
-            to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-        }
-
-        /* Active card pulse flash */
-        @keyframes cardFlash {
-            0%   { box-shadow: 0 0 0 0 rgba(74,158,255,0.7), 0 0 40px rgba(74,158,255,0.3); }
-            40%  { box-shadow: 0 0 0 16px rgba(74,158,255,0), 0 0 60px rgba(74,158,255,0.5); }
-            100% { box-shadow: 0 0 30px rgba(74,158,255,0.15), 0 0 60px rgba(155,89,255,0.08); }
-        }
-        .subject-card.active {
-            animation: cardFlash 0.8s ease forwards, activeConstellation 3s 0.8s ease-in-out infinite;
         }
 
         .panel-header {
@@ -553,7 +682,6 @@
             box-shadow: 0 0 15px rgba(74,158,255,0.15);
         }
 
-        /* ===== MODE GRID ===== */
         .modes-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -569,9 +697,9 @@
             border: 1px solid rgba(74,158,255,0.1);
             position: relative;
             overflow: hidden;
+            display: block;
         }
 
-        /* Mini star field in mode item */
         .mode-item::before {
             content: '';
             position: absolute;
@@ -685,7 +813,6 @@
         }
         .ebook-features li::before { color: #c084fc; }
 
-        /* ===== FOOTER ===== */
         .footer {
             text-align: center;
             margin-top: 70px;
@@ -699,7 +826,6 @@
             margin-right: auto;
         }
 
-        /* ===== SPLASH ===== */
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -791,17 +917,12 @@
 
         .fade-out { opacity: 0; visibility: hidden; }
 
-        /* Reveal animations */
         .scroll-reveal {
             opacity: 0;
             transform: translateY(25px);
             transition: all 0.8s cubic-bezier(0.2,0.9,0.4,1);
         }
         .scroll-reveal.revealed { opacity: 1; transform: translateY(0); }
-        .scroll-reveal:nth-child(2) { transition-delay: 0.1s; }
-        .scroll-reveal:nth-child(3) { transition-delay: 0.15s; }
-        .scroll-reveal:nth-child(4) { transition-delay: 0.2s; }
-        .scroll-reveal:nth-child(5) { transition-delay: 0.25s; }
 
         @media (max-width: 768px) {
             .main-container { padding: 20px 16px 50px; }
@@ -815,146 +936,12 @@
             .mode-item { padding: 22px 16px; }
             .mode-icon { font-size: 40px; }
             .mode-item h4 { font-size: 1.1rem; }
+            .floating-menu { bottom: 16px; left: 16px; }
+            .menu-btn { width: 44px; height: 44px; font-size: 20px; }
         }
         @media (max-width: 640px) {
             .modes-grid { grid-template-columns: 1fr; }
             .panel-header { flex-direction: column; gap: 12px; align-items: flex-start; }
-        }
-
-        /* === CLICK ANIMATIONS === */
-        .card-ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(74,158,255,0.4) 0%, rgba(0,212,255,0.15) 50%, transparent 70%);
-            transform: scale(0);
-            animation: rippleBurst 0.7s cubic-bezier(0.2,0.9,0.4,1) forwards;
-            pointer-events: none;
-            z-index: 20;
-        }
-        @keyframes rippleBurst {
-            0%   { transform: scale(0); opacity: 1; }
-            60%  { opacity: 0.5; }
-            100% { transform: scale(3.5); opacity: 0; }
-        }
-        .star-particle {
-            position: absolute;
-            width: 5px; height: 5px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 21;
-            animation: starShoot var(--dur, 0.6s) ease-out forwards;
-        }
-        @keyframes starShoot {
-            0%   { transform: translate(0,0) scale(1.2); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
-        /* Panel + mode items animate in */
-        .mode-panel { animation: panelSlideIn 0.55s cubic-bezier(0.2,0.9,0.4,1) both; }
-        @keyframes panelSlideIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.96); filter: blur(6px); }
-            to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-        }
-        .modes-grid .mode-item {
-            opacity: 0;
-            animation: modeCardIn 0.5s cubic-bezier(0.2,0.9,0.4,1) forwards;
-        }
-        .modes-grid .mode-item:nth-child(1) { animation-delay: 0.15s; }
-        .modes-grid .mode-item:nth-child(2) { animation-delay: 0.25s; }
-        .modes-grid .mode-item:nth-child(3) { animation-delay: 0.35s; }
-        @keyframes modeCardIn {
-            from { opacity: 0; transform: translateY(18px) scale(0.96); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        /* Card flash on activate */
-        .subject-card.active {
-            border-color: rgba(74,158,255,0.5) !important;
-            background: linear-gradient(145deg, rgba(13,27,75,0.8), rgba(26,13,59,0.9)) !important;
-            animation: cardActivate 0.7s ease forwards, activeConstellation 3s 0.7s ease-in-out infinite !important;
-        }
-        @keyframes cardActivate {
-            0%   { box-shadow: 0 0 0 0 rgba(74,158,255,0.8), 0 0 30px rgba(0,212,255,0.3); transform: scale(1.03); }
-            50%  { box-shadow: 0 0 0 20px rgba(74,158,255,0), 0 0 60px rgba(74,158,255,0.5); transform: scale(1.02); }
-            100% { box-shadow: 0 0 30px rgba(74,158,255,0.2), 0 0 60px rgba(155,89,255,0.1); transform: scale(1); }
-        }
-
-        /* ===== ALARICH FLOATING BUDDY ===== */
-        #alarich-buddy {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 9999;
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
-            font-family: 'Raleway', sans-serif;
-        }
-        .alarich-avatar {
-            width: 56px; height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--nebula-blue), var(--nebula-purple));
-            border: 1px solid rgba(74,158,255,0.35);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 26px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(74,158,255,0.3), 0 0 40px rgba(155,89,255,0.15);
-            animation: buddyFloat 4s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-        @keyframes buddyFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-        .alarich-bubble {
-            max-width: 230px;
-            background: linear-gradient(145deg, rgba(13,27,75,0.92), rgba(6,3,24,0.95));
-            border: 1px solid rgba(74,158,255,0.25);
-            border-radius: 18px;
-            padding: 12px 16px;
-            color: var(--star-white);
-            font-size: 0.78rem;
-            line-height: 1.5;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.6), 0 0 20px rgba(74,158,255,0.1);
-            position: relative;
-            opacity: 0;
-            transform: translateY(10px) scale(0.95);
-            transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1);
-            pointer-events: none;
-        }
-        .alarich-bubble.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-        .alarich-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: 18px; right: -7px;
-            width: 14px; height: 14px;
-            background: rgba(13,27,75,0.92);
-            border-right: 1px solid rgba(74,158,255,0.25);
-            border-top: 1px solid rgba(74,158,255,0.25);
-            transform: rotate(45deg);
-        }
-        .alarich-bubble strong {
-            color: var(--aurora-cyan);
-            display: block;
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            margin-bottom: 4px;
-            letter-spacing: 0.04em;
-        }
-        .alarich-bubble .alarich-close {
-            position: absolute;
-            top: 6px; right: 8px;
-            cursor: pointer;
-            color: rgba(184,200,240,0.4);
-            font-size: 0.7rem;
-        }
-        .alarich-bubble .alarich-close:hover { color: var(--aurora-cyan); }
-        @media (max-width: 640px) {
-            #alarich-buddy { bottom: 14px; right: 14px; }
-            .alarich-avatar { width: 48px; height: 48px; font-size: 22px; }
-            .alarich-bubble { max-width: 180px; font-size: 0.72rem; }
         }
     </style>
 </head>
@@ -969,6 +956,19 @@
 <div class="nebula-layer nebula-3"></div>
 <div class="nebula-layer nebula-4"></div>
 <div class="aurora"></div>
+
+<!-- FLOATING MENU POJOK KIRI -->
+<div class="floating-menu">
+    <div class="menu-btn" id="homeBtn" title="Home">🏠</div>
+    <div class="menu-btn" id="settingsBtn" title="Pengaturan">⚙️</div>
+    <div class="menu-btn" id="themeToggle" title="Mode Terang/Gelap">🌓</div>
+    
+    <div class="settings-dropdown" id="settingsDropdown">
+        <div id="themeOption">🌓 Mode Terang / Gelap</div>
+        <a href="#" id="aboutOption">ℹ️ Tentang LMS</a>
+        <a href="#" id="helpOption">❓ Bantuan</a>
+    </div>
+</div>
 
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
@@ -1055,6 +1055,88 @@
     </div>
 </div>
 
+<style>
+    /* Alarich buddy style */
+    #alarich-buddy {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 9999;
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        font-family: 'Raleway', sans-serif;
+    }
+    .alarich-avatar {
+        width: 56px; height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--nebula-blue), var(--nebula-purple));
+        border: 1px solid rgba(74,158,255,0.35);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 26px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(74,158,255,0.3), 0 0 40px rgba(155,89,255,0.15);
+        animation: buddyFloat 4s ease-in-out infinite;
+        flex-shrink: 0;
+    }
+    @keyframes buddyFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+    .alarich-bubble {
+        max-width: 230px;
+        background: linear-gradient(145deg, rgba(13,27,75,0.92), rgba(6,3,24,0.95));
+        border: 1px solid rgba(74,158,255,0.25);
+        border-radius: 18px;
+        padding: 12px 16px;
+        color: var(--star-white);
+        font-size: 0.78rem;
+        line-height: 1.5;
+        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.6), 0 0 20px rgba(74,158,255,0.1);
+        position: relative;
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+        transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1);
+        pointer-events: none;
+    }
+    .alarich-bubble.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+    .alarich-bubble::after {
+        content: '';
+        position: absolute;
+        bottom: 18px; right: -7px;
+        width: 14px; height: 14px;
+        background: rgba(13,27,75,0.92);
+        border-right: 1px solid rgba(74,158,255,0.25);
+        border-top: 1px solid rgba(74,158,255,0.25);
+        transform: rotate(45deg);
+    }
+    .alarich-bubble strong {
+        color: var(--aurora-cyan);
+        display: block;
+        font-family: 'Cinzel', serif;
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+        letter-spacing: 0.04em;
+    }
+    .alarich-bubble .alarich-close {
+        position: absolute;
+        top: 6px; right: 8px;
+        cursor: pointer;
+        color: rgba(184,200,240,0.4);
+        font-size: 0.7rem;
+    }
+    .alarich-bubble .alarich-close:hover { color: var(--aurora-cyan); }
+    @media (max-width: 640px) {
+        #alarich-buddy { bottom: 14px; right: 14px; }
+        .alarich-avatar { width: 48px; height: 48px; font-size: 22px; }
+        .alarich-bubble { max-width: 180px; font-size: 0.72rem; }
+    }
+</style>
+
 <script>
 // ========== CONSTELLATION / STAR FIELD CANVAS ==========
 (function() {
@@ -1062,6 +1144,7 @@
     const ctx = canvas.getContext('2d');
     let W, H, stars = [], constellationLines = [], shootingStars = [], glitterParticles = [];
     let animFrame;
+    let t = 0;
 
     function resize() {
         W = canvas.width = window.innerWidth;
@@ -1069,7 +1152,6 @@
         initStars();
     }
 
-    // Star types: tiny dim, medium, bright, blue-tinted, purple-tinted
     function initStars() {
         stars = [];
         const count = Math.min(Math.floor(W * H / 3000), 400);
@@ -1077,27 +1159,22 @@
             const r = Math.random();
             let size, brightness, color;
             if (r < 0.6) {
-                // Tiny dim stars
                 size = 0.3 + Math.random() * 0.5;
                 brightness = 0.2 + Math.random() * 0.4;
                 color = `rgba(200,215,255,${brightness})`;
             } else if (r < 0.8) {
-                // Medium stars
                 size = 0.6 + Math.random() * 0.8;
                 brightness = 0.4 + Math.random() * 0.5;
                 color = `rgba(220,230,255,${brightness})`;
             } else if (r < 0.92) {
-                // Blue-tinted stars
                 size = 0.8 + Math.random() * 1.0;
                 brightness = 0.5 + Math.random() * 0.5;
                 color = `rgba(100,180,255,${brightness})`;
             } else if (r < 0.97) {
-                // Purple/violet stars
                 size = 0.6 + Math.random() * 0.8;
                 brightness = 0.4 + Math.random() * 0.4;
                 color = `rgba(180,130,255,${brightness})`;
             } else {
-                // Bright white stars
                 size = 1.2 + Math.random() * 1.5;
                 brightness = 0.7 + Math.random() * 0.3;
                 color = `rgba(255,255,255,${brightness})`;
@@ -1113,7 +1190,6 @@
             });
         }
 
-        // Constellation lines — connect nearby bright stars
         constellationLines = [];
         const brightStars = stars.filter(s => s.size > 1.0);
         for (let i = 0; i < brightStars.length; i++) {
@@ -1131,14 +1207,13 @@
             }
         }
 
-        // Initialize glitter particles
         glitterParticles = [];
         for (let i = 0; i < 80; i++) {
             glitterParticles.push({
                 x: Math.random() * W,
                 y: Math.random() * H,
                 size: 1 + Math.random() * 2.5,
-                type: Math.floor(Math.random() * 3), // 0=circle, 1=diamond, 2=cross
+                type: Math.floor(Math.random() * 3),
                 hue: Math.random() > 0.5 ? 'blue' : (Math.random() > 0.5 ? 'purple' : 'silver'),
                 speed: 0.1 + Math.random() * 0.4,
                 angle: Math.random() * Math.PI * 2,
@@ -1148,9 +1223,7 @@
         }
     }
 
-    // Shooting star
     function addShootingStar() {
-        const angle = 0.3 + Math.random() * 0.4; // ~17-23 degrees
         shootingStars.push({
             x: Math.random() * W * 0.7,
             y: Math.random() * H * 0.4,
@@ -1164,14 +1237,12 @@
     }
 
     let shootingTimer = 0;
-    let t = 0;
 
     function draw() {
         ctx.clearRect(0, 0, W, H);
         t += 0.005;
         shootingTimer++;
 
-        // Constellation lines
         constellationLines.forEach(line => {
             ctx.beginPath();
             ctx.moveTo(line.s1.x, line.s1.y);
@@ -1181,7 +1252,6 @@
             ctx.stroke();
         });
 
-        // Stars
         stars.forEach(star => {
             const twinkle = Math.sin(t * star.twinkleSpeed + star.twinkleOffset);
             const alpha = 0.5 + twinkle * 0.5;
@@ -1189,7 +1259,6 @@
             ctx.save();
             ctx.globalAlpha = alpha;
 
-            // Glow for larger stars
             if (star.size > 1.0) {
                 const grd = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 4);
                 if (star.color.includes('100,180')) {
@@ -1206,13 +1275,11 @@
                 ctx.fill();
             }
 
-            // Star core
             ctx.fillStyle = star.color;
             ctx.beginPath();
             ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
             ctx.fill();
 
-            // Cross flare for bright stars
             if (star.hasCross && star.size > 1.2) {
                 ctx.globalAlpha = alpha * 0.5;
                 ctx.strokeStyle = star.color;
@@ -1225,17 +1292,14 @@
                 ctx.lineTo(star.x, star.y + arm);
                 ctx.stroke();
             }
-
             ctx.restore();
         });
 
-        // Glitter particles
         glitterParticles.forEach(g => {
             g.twinkle += g.twinkleSpeed * 0.02;
             g.x += Math.cos(g.angle) * g.speed * 0.3;
             g.y += Math.sin(g.angle) * g.speed * 0.3;
 
-            // Wrap
             if (g.x < 0) g.x = W;
             if (g.x > W) g.x = 0;
             if (g.y < 0) g.y = H;
@@ -1251,13 +1315,11 @@
             else color = '#c8d8ff';
 
             if (g.type === 0) {
-                // Circle glitter
                 ctx.fillStyle = color;
                 ctx.beginPath();
                 ctx.arc(g.x, g.y, g.size, 0, Math.PI * 2);
                 ctx.fill();
             } else if (g.type === 1) {
-                // Diamond glitter
                 ctx.fillStyle = color;
                 ctx.save();
                 ctx.translate(g.x, g.y);
@@ -1265,7 +1327,6 @@
                 ctx.fillRect(-g.size * 0.8, -g.size * 0.8, g.size * 1.6, g.size * 1.6);
                 ctx.restore();
             } else {
-                // Cross/sparkle glitter
                 ctx.strokeStyle = color;
                 ctx.lineWidth = g.size * 0.5;
                 const arm = g.size * 2.5;
@@ -1273,7 +1334,6 @@
                 ctx.moveTo(g.x - arm, g.y); ctx.lineTo(g.x + arm, g.y);
                 ctx.moveTo(g.x, g.y - arm); ctx.lineTo(g.x, g.y + arm);
                 ctx.stroke();
-                // Diagonal arms
                 ctx.globalAlpha = alpha * 0.5;
                 const arm2 = g.size * 1.5;
                 ctx.beginPath();
@@ -1284,7 +1344,6 @@
             ctx.restore();
         });
 
-        // Shooting stars
         if (shootingTimer > 180 && Math.random() > 0.985) {
             addShootingStar();
             shootingTimer = 0;
@@ -1303,7 +1362,6 @@
             ctx.save();
             ctx.globalAlpha = ss.alpha * 0.9;
 
-            // Trail
             const grad = ctx.createLinearGradient(
                 ss.x - ss.vx * (ss.length / ss.vx),
                 ss.y - ss.vy * (ss.length / ss.vx),
@@ -1320,7 +1378,6 @@
             ctx.lineTo(ss.x, ss.y);
             ctx.stroke();
 
-            // Head glow
             const hGrad = ctx.createRadialGradient(ss.x, ss.y, 0, ss.x, ss.y, 4);
             hGrad.addColorStop(0, 'white');
             hGrad.addColorStop(1, 'transparent');
@@ -1340,7 +1397,6 @@
     resize();
     draw();
 
-    // Splash
     window.addEventListener('load', () => {
         setTimeout(() => {
             const splash = document.getElementById('splash-screen');
@@ -1363,6 +1419,71 @@ function revealOnScroll() {
 }
 window.addEventListener('scroll', revealOnScroll);
 window.addEventListener('load', revealOnScroll);
+
+// ========== FLOATING MENU LOGIC ==========
+const homeBtn = document.getElementById('homeBtn');
+const settingsBtn = document.getElementById('settingsBtn');
+const themeToggle = document.getElementById('themeToggle');
+const settingsDropdown = document.getElementById('settingsDropdown');
+const themeOption = document.getElementById('themeOption');
+
+// Home button - arahkan ke rich-corner
+homeBtn.addEventListener('click', () => {
+    window.location.href = 'https://saka12398.github.io/rich-corner/';
+});
+
+// Settings dropdown toggle
+settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    settingsDropdown.classList.toggle('show');
+});
+
+// Tutup dropdown saat klik di luar
+document.addEventListener('click', (e) => {
+    if (!settingsBtn.contains(e.target) && !settingsDropdown.contains(e.target)) {
+        settingsDropdown.classList.remove('show');
+    }
+});
+
+// Theme option di dalam dropdown
+themeOption.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    // Simpan preferensi ke localStorage
+    if (document.body.classList.contains('light-mode')) {
+        localStorage.setItem('lmsTheme', 'light');
+    } else {
+        localStorage.setItem('lmsTheme', 'dark');
+    }
+    settingsDropdown.classList.remove('show');
+});
+
+// Theme toggle button langsung
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    if (document.body.classList.contains('light-mode')) {
+        localStorage.setItem('lmsTheme', 'light');
+    } else {
+        localStorage.setItem('lmsTheme', 'dark');
+    }
+});
+
+// Load saved theme
+const savedTheme = localStorage.getItem('lmsTheme');
+if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+}
+
+// About & Help options (placeholder)
+document.getElementById('aboutOption').addEventListener('click', (e) => {
+    e.preventDefault();
+    alert('✨ LMS Stellar ✨\n\nPlatform belajar persiapan TKA & UTER dengan materi lengkap, latihan soal, dan e-book interaktif.\n\nDibuat untuk membantu siswa SMP mencapai prestasi terbaik.');
+    settingsDropdown.classList.remove('show');
+});
+document.getElementById('helpOption').addEventListener('click', (e) => {
+    e.preventDefault();
+    alert('❓ Bantuan LMS\n\n1. Pilih mata pelajaran (MTK TKA, B.Indo TKA, MTK UTER, IPA UTER)\n2. Pilih mode: Latihan, Test, atau E-Book\n3. Kerjakan soal dan lihat pembahasan\n\nSelamat belajar! 🌟');
+    settingsDropdown.classList.remove('show');
+});
 
 // ========== CARD LOGIC ==========
 const cards = {
@@ -1566,16 +1687,14 @@ Object.entries(cards).forEach(([id, card]) => {
         if (userDismissed) return;
         idx = (idx + 1) % greetings.length;
         showBubble(greetings[idx]);
-        setTimeout(hideBubble, 6000); // bubble visible for 6s
+        setTimeout(hideBubble, 6000);
     }
 
-    // Initial greeting after short delay
     setTimeout(() => {
         showBubble(greetings[0]);
         setTimeout(hideBubble, 6000);
     }, 1500);
 
-    // Periodic, non-spammy: every 45 seconds
     autoTimer = setInterval(cycleMessage, 45000);
 
     avatar.addEventListener('click', () => {
@@ -1586,7 +1705,7 @@ Object.entries(cards).forEach(([id, card]) => {
         e.stopPropagation();
         hideBubble();
         userDismissed = true;
-        setTimeout(() => { userDismissed = false; }, 60000); // re-allow after 1 min
+        setTimeout(() => { userDismissed = false; }, 60000);
     });
 })();
 </script>
