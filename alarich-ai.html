@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Alarich AI v5</title>
+<title>Alarich AI v6</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -19,11 +19,6 @@ window.MathJax = {
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif}
 
-/* ============================================================
-   COLOR TOKENS
-   Base: warm midnight teal (dark), creamy paper (light)
-   Accent: coral-amber duo — feels personal, not corporate-blue
-============================================================ */
 :root{
   --bg:#0d1520;
   --panel:#121d2b;
@@ -44,6 +39,8 @@ window.MathJax = {
   --radius-lg:18px;
   --radius-md:12px;
   --radius-sm:8px;
+  /* special welcome gradient */
+  --special-grad: linear-gradient(135deg, #7c3aed, #db2777, #f97316);
 }
 
 body.light-mode{
@@ -74,9 +71,7 @@ body{
   transition:background .25s, color .25s;
 }
 
-/* ============================================================
-   SIDEBAR
-============================================================ */
+/* SIDEBAR */
 .sidebar{
   width:272px;
   background:var(--panel);
@@ -109,7 +104,6 @@ body{
 .newchat-btn:hover{transform:translateY(-1px)}
 .newchat-btn:active{transform:translateY(0)}
 
-.mode-select{margin:0 14px 6px}
 .mode-select-label{
   font-size:10.5px;color:var(--muted);font-weight:700;
   text-transform:uppercase;letter-spacing:.1em;
@@ -160,9 +154,7 @@ body{
   border-top:1px solid var(--border);line-height:1.6;
 }
 
-/* ============================================================
-   MAIN
-============================================================ */
+/* MAIN */
 .main{flex:1;display:flex;flex-direction:column;min-width:0}
 .topbar{
   display:flex;align-items:center;gap:10px;padding:13px 18px;
@@ -219,12 +211,12 @@ body{
 .msg th{background:var(--input-bg)}
 .msg h1,.msg h2,.msg h3{font-family:'Sora',sans-serif;margin:10px 0 6px;line-height:1.35}
 .msg h2{font-size:17px;color:var(--accent)}
-/* Arabic / RTL text */
 .msg [dir="rtl"],.msg .arabic{
   font-family:'Noto Naskh Arabic','Amiri','Scheherazade New',serif;
   font-size:1.3em;line-height:2.1;direction:rtl;text-align:right;
 }
 
+/* WELCOME CARDS */
 .welcome-card{
   max-width:560px;margin:40px auto;text-align:center;
   padding:28px 24px;border-radius:var(--radius-lg);
@@ -238,6 +230,59 @@ body{
 .welcome-card h2{font-family:'Sora',sans-serif;font-size:19px;margin-bottom:6px}
 .welcome-card p{color:var(--muted);font-size:13.5px;line-height:1.7}
 
+/* SPECIAL WELCOME (nama-nama istimewa) */
+.special-welcome{
+  max-width:560px;margin:30px auto 10px;text-align:center;
+  padding:28px 24px;border-radius:var(--radius-lg);
+  border:1px solid transparent;
+  background:var(--panel-2);
+  position:relative;overflow:hidden;
+  animation:fadeUp .4s ease;
+}
+.special-welcome::before{
+  content:'';position:absolute;inset:0;
+  background:var(--special-grad);
+  opacity:.12;border-radius:var(--radius-lg);
+  pointer-events:none;
+}
+.special-welcome .sp-border{
+  position:absolute;inset:0;border-radius:var(--radius-lg);
+  border:1.5px solid transparent;
+  background:var(--special-grad) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:destination-out;
+  mask-composite:exclude;
+  pointer-events:none;
+}
+.special-welcome .sp-icon{
+  width:60px;height:60px;border-radius:18px;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  background:var(--special-grad);
+  box-shadow:0 8px 24px #db2877 44;
+  animation:pulse-icon 2.5s infinite ease-in-out;
+}
+@keyframes pulse-icon{
+  0%,100%{box-shadow:0 8px 24px #db287744}
+  50%{box-shadow:0 8px 32px #7c3aed66}
+}
+.special-welcome h2{
+  font-family:'Sora',sans-serif;font-size:20px;font-weight:800;
+  background:var(--special-grad);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:8px;
+}
+.special-welcome p{
+  color:var(--muted);font-size:13.5px;line-height:1.8;
+}
+.special-welcome .sp-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:14px;padding:5px 14px;border-radius:999px;
+  font-size:12px;font-weight:700;
+  background:var(--special-grad);color:#fff;
+  opacity:.9;
+}
+
 /* TYPING INDICATOR */
 .typing-dots{display:inline-flex;gap:4px;align-items:center;padding:4px 0}
 .typing-dots span{
@@ -248,18 +293,13 @@ body{
 .typing-dots span:nth-child(3){animation-delay:.3s}
 @keyframes bounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
 
-/* ============================================================
-   INPUT AREA
-============================================================ */
+/* INPUT AREA */
 .input-area{
   padding:12px 16px 16px;
   background:var(--panel);
   border-top:1px solid var(--border);
 }
-.file-preview-bar{
-  display:flex;gap:8px;flex-wrap:wrap;
-  margin-bottom:8px;
-}
+.file-preview-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .file-chip{
   display:flex;align-items:center;gap:6px;
   background:var(--hover);border:1px solid var(--border);
@@ -267,9 +307,7 @@ body{
   max-width:200px;
 }
 .file-chip img{width:32px;height:32px;object-fit:cover;border-radius:6px;flex-shrink:0}
-.file-chip .chip-name{
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;
-}
+.file-chip .chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 .file-chip .rm{cursor:pointer;opacity:.6;margin-left:2px;flex-shrink:0}
 .file-chip .rm:hover{opacity:1}
 .input-row{display:flex;gap:8px;align-items:flex-end}
@@ -298,18 +336,14 @@ textarea::placeholder{color:var(--muted)}
 .send:disabled{opacity:.45;cursor:not-allowed}
 .send:not(:disabled):hover{transform:translateY(-1px)}
 
-/* ============================================================
-   OVERLAY
-============================================================ */
+/* OVERLAY */
 .overlay{
   display:none;position:fixed;inset:0;
   background:#0008;z-index:40;
 }
 .overlay.show{display:block}
 
-/* ============================================================
-   SETTINGS PANEL
-============================================================ */
+/* SETTINGS PANEL */
 .settings-panel{
   position:fixed;top:0;right:0;height:100%;width:330px;
   background:var(--panel);border-left:1px solid var(--border);
@@ -335,16 +369,12 @@ textarea::placeholder{color:var(--muted)}
   justify-content:space-between;gap:12px;
   font-size:14px;color:var(--text);
 }
-
-/* LANGUAGE SELECT */
 .lang-select-full{
   width:100%;padding:11px;border-radius:var(--radius-md);
   border:1px solid var(--border);background:var(--input-bg);
   color:var(--text);font-size:13.5px;cursor:pointer;
 }
 .lang-select-full:focus{outline:none;border-color:var(--accent)}
-
-/* TOGGLE SWITCH */
 .toggle{position:relative;width:48px;height:26px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0;position:absolute}
 .toggle-track{
@@ -358,8 +388,6 @@ textarea::placeholder{color:var(--muted)}
   background:white;transition:transform .2s;pointer-events:none;
 }
 .toggle input:checked ~ .toggle-thumb{transform:translateX(22px)}
-
-/* API KEY FIELD */
 .api-key-wrap{position:relative;display:flex;align-items:center}
 .api-key-wrap input{
   width:100%;padding:11px 42px 11px 13px;
@@ -407,9 +435,7 @@ textarea::placeholder{color:var(--muted)}
 }
 .settings-divider{height:1px;background:var(--border);margin:0 -20px}
 
-/* ============================================================
-   GATE (API key setup)
-============================================================ */
+/* GATE */
 .gate{
   position:fixed;inset:0;background:#0b0f12ee;
   display:flex;align-items:center;justify-content:center;
@@ -420,29 +446,23 @@ body.light-mode .gate{background:#f6f2ecee}
   background:var(--panel);border:1px solid var(--border);
   border-radius:var(--radius-lg);padding:30px;max-width:440px;width:100%;
 }
-.gate-box .gate-logo{
-  display:flex;align-items:center;gap:10px;margin-bottom:14px;
-}
+.gate-box .gate-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .gate-box .gate-logo .bolt{
   width:36px;height:36px;border-radius:11px;
   display:flex;align-items:center;justify-content:center;font-size:18px;
   background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a1830;
 }
 .gate-box .gate-logo span{font-family:'Sora',sans-serif;font-size:20px;font-weight:800}
-.gate-box p{
-  font-size:13px;color:var(--muted);
-  margin-bottom:16px;line-height:1.75;
-}
+.gate-box p{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.75}
 .gate-box a{color:var(--accent);text-decoration:none}
 .gate-box a:hover{text-decoration:underline}
-.gate-api-wrap{margin-bottom:12px}
+.gate-api-wrap{margin-bottom:12px;position:relative;display:flex;align-items:center}
 .gate-api-wrap input{
   width:100%;padding:13px 46px 13px 14px;
   border-radius:var(--radius-md);border:1px solid var(--border);
   background:var(--input-bg);color:var(--text);font-size:14px;
 }
 .gate-api-wrap input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.gate-api-wrap{position:relative;display:flex;align-items:center}
 .primary-btn{
   width:100%;padding:13px;border:none;border-radius:var(--radius-md);
   background:linear-gradient(135deg,var(--accent),var(--accent2));
@@ -452,9 +472,7 @@ body.light-mode .gate{background:#f6f2ecee}
 .primary-btn:hover{transform:translateY(-1px)}
 .hidden{display:none!important}
 
-/* ============================================================
-   RESPONSIVE
-============================================================ */
+/* RESPONSIVE */
 @media(max-width:850px){
   .sidebar{
     position:fixed;top:0;left:0;height:100%;
@@ -477,27 +495,24 @@ body.light-mode .gate{background:#f6f2ecee}
 </head>
 <body>
 
-<!-- ============================================================
-     API KEY GATE
-============================================================ -->
+<!-- GATE -->
 <div class="gate" id="gate">
   <div class="gate-box">
     <div class="gate-logo"><span class="bolt"><i class="ti ti-bolt"></i></span><span>Alarich AI</span></div>
     <p>
       Masukkan API Key untuk mulai. Mendukung:<br>
       • <b>Gemini</b> — key diawali <code>AIza...</code> (gratis)<br>
-      • <b>OpenRouter</b> — key diawali <code>sk-or-v1-...</code> (akses GPT, Claude, Llama, dll)<br><br>
-      Dapatkan key:<br>
+      • <b>OpenRouter</b> — key diawali <code>sk-or-v1-...</code><br><br>
       Gemini: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
       OpenRouter: <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a><br><br>
-      <small>Key disimpan <b>hanya di perangkat ini</b> (localStorage) — tidak dikirim ke server lain.</small>
+      <small>Key disimpan hanya di perangkat ini (localStorage).</small>
     </p>
     <div class="gate-api-wrap" style="margin-bottom:12px">
       <input type="text" id="gateNameInput" placeholder="Nama kamu (panggilan)..." style="padding:13px 14px">
     </div>
     <div class="gate-api-wrap">
       <input type="password" id="gateKeyInput" placeholder="Tempel API Key di sini..." oninput="onGateKeyInput()">
-      <button class="eye-btn" onclick="toggleEye('gateKeyInput',this)" type="button" title="Tampilkan/sembunyikan key">
+      <button class="eye-btn" onclick="toggleEye('gateKeyInput',this)" type="button">
         <i class="ti ti-eye"></i>
       </button>
     </div>
@@ -517,19 +532,14 @@ body.light-mode .gate{background:#f6f2ecee}
   </div>
 </div>
 
-<!-- OVERLAY (mobile sidebar / settings panel backdrop) -->
 <div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
 
-<!-- ============================================================
-     SIDEBAR
-============================================================ -->
+<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <div class="logo"><span class="bolt"><i class="ti ti-bolt"></i></span>Alarich AI</div>
-
   <button class="newchat-btn" onclick="newChat()">
     <i class="ti ti-plus" style="margin-right:6px"></i>Chat Baru
   </button>
-
   <div class="mode-select-label">Mode Obrolan</div>
   <div class="mode-grid" id="modeGrid">
     <div class="mode-card" data-mode="academic" onclick="onModeChange('academic')">
@@ -545,27 +555,23 @@ body.light-mode .gate{background:#f6f2ecee}
       <span class="ic">☪️</span><span class="lb">Islamic</span>
     </div>
   </div>
-
   <div class="history-label">Riwayat</div>
   <div class="history" id="history"></div>
-
   <div class="sidebar-footer">
     Riwayat tersimpan di perangkat ini.<br>
     Setiap device perlu memasukkan key sendiri.
   </div>
 </div>
 
-<!-- ============================================================
-     MAIN
-============================================================ -->
+<!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <button class="hamburger" onclick="toggleSidebar(true)" title="Menu">
+    <button class="hamburger" onclick="toggleSidebar(true)">
       <i class="ti ti-menu-2"></i>
     </button>
     <span class="mode-badge" id="modeBadge"></span>
     <div class="topbar-right">
-      <button class="icon-btn" onclick="toggleSettings(true)" title="Pengaturan">
+      <button class="icon-btn" onclick="toggleSettings(true)">
         <i class="ti ti-settings"></i>
       </button>
     </div>
@@ -574,12 +580,9 @@ body.light-mode .gate{background:#f6f2ecee}
   <div class="chat" id="chat"></div>
 
   <div class="input-area">
-    <!-- File preview chips -->
     <div class="file-preview-bar" id="filePreviewBar"></div>
-
     <div class="input-row">
-      <!-- Attach button -->
-      <button class="attach-btn" onclick="document.getElementById('fileInput').click()" title="Lampirkan gambar / file">
+      <button class="attach-btn" onclick="document.getElementById('fileInput').click()">
         <i class="ti ti-paperclip"></i>
       </button>
       <input
@@ -590,58 +593,35 @@ body.light-mode .gate{background:#f6f2ecee}
         style="display:none"
         onchange="handleFileSelect(event)"
       >
-
-      <textarea
-        id="text"
-        placeholder="Tanyakan apa saja... (Shift+Enter untuk baris baru)"
-      ></textarea>
-
-      <button class="send" id="sendBtn" onclick="sendMessage()" title="Kirim">
+      <textarea id="text" placeholder="Tanyakan apa saja... (Shift+Enter untuk baris baru)"></textarea>
+      <button class="send" id="sendBtn" onclick="sendMessage()">
         <i class="ti ti-send"></i>
       </button>
     </div>
   </div>
 </div>
 
-<!-- ============================================================
-     SETTINGS PANEL
-============================================================ -->
+<!-- SETTINGS PANEL -->
 <div class="settings-panel" id="settingsPanel">
   <div class="settings-header">
     <h3><i class="ti ti-settings" style="margin-right:6px;font-size:16px"></i>Pengaturan</h3>
-    <button class="icon-btn" onclick="toggleSettings(false)" title="Tutup">
-      <i class="ti ti-x"></i>
-    </button>
+    <button class="icon-btn" onclick="toggleSettings(false)"><i class="ti ti-x"></i></button>
   </div>
-
   <div class="settings-body">
-
-    <!-- Nama -->
     <div class="settings-section">
       <div class="settings-label">Nama Kamu</div>
       <div class="api-key-wrap">
-        <input
-          type="text"
-          id="settingsNameInput"
-          placeholder="Nama panggilan kamu..."
-          style="padding:11px 13px"
-        >
+        <input type="text" id="settingsNameInput" placeholder="Nama panggilan kamu..." style="padding:11px 13px">
       </div>
       <button class="save-key-btn" onclick="saveUserName()">
         <i class="ti ti-device-floppy" style="margin-right:6px"></i>Simpan Nama
       </button>
     </div>
-
     <div class="settings-divider"></div>
-
-    <!-- Tampilan -->
     <div class="settings-section">
       <div class="settings-label">Tampilan</div>
       <div class="settings-row">
-        <span>
-          <i class="ti ti-sun" style="margin-right:6px;font-size:15px;vertical-align:-2px"></i>
-          Mode Terang
-        </span>
+        <span><i class="ti ti-sun" style="margin-right:6px;font-size:15px;vertical-align:-2px"></i>Mode Terang</span>
         <label class="toggle">
           <input type="checkbox" id="lightModeToggle" onchange="toggleLightMode(this.checked)">
           <div class="toggle-track"></div>
@@ -649,50 +629,32 @@ body.light-mode .gate{background:#f6f2ecee}
         </label>
       </div>
     </div>
-
     <div class="settings-divider"></div>
-
-    <!-- Bahasa -->
     <div class="settings-section">
       <div class="settings-label">Bahasa Jawaban</div>
       <select id="langSelect" class="lang-select-full" onchange="saveLanguage()">
-        <option value="auto">🌐 Otomatis (ikuti bahasa kamu)</option>
+        <option value="auto">🌐 Otomatis</option>
         <option value="id">🇮🇩 Bahasa Indonesia</option>
         <option value="su">Basa Sunda</option>
         <option value="jv">Basa Jawa</option>
         <option value="ban">Basa Bali</option>
-        <option value="ar">🇸🇦 العربية (Arab)</option>
+        <option value="ar">🇸🇦 العربية</option>
         <option value="en">🇬🇧 English</option>
-        <option value="ja">🇯🇵 日本語 (Jepang)</option>
+        <option value="ja">🇯🇵 日本語</option>
       </select>
-      <div class="settings-info" style="margin-top:4px">
-        Pilih "Otomatis" biar Alarich nyesuain bahasa sesuai bahasa yang kamu pakai waktu ngetik. Atau kunci ke satu bahasa biar Alarich selalu jawab pakai bahasa itu.
-      </div>
     </div>
-
     <div class="settings-divider"></div>
-
-    <!-- API Key -->
     <div class="settings-section">
       <div class="settings-label">API Key</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px">
         Provider aktif: <span id="providerBadge"></span>
       </div>
       <div class="api-key-wrap">
-        <input
-          type="password"
-          id="settingsKeyInput"
-          placeholder="Masukkan API Key..."
-          oninput="onSettingsKeyInput()"
-        >
-        <button class="eye-btn" onclick="toggleEye('settingsKeyInput',this)" type="button" title="Tampilkan/sembunyikan key">
-          <i class="ti ti-eye"></i>
-        </button>
+        <input type="password" id="settingsKeyInput" placeholder="Masukkan API Key..." oninput="onSettingsKeyInput()">
+        <button class="eye-btn" onclick="toggleEye('settingsKeyInput',this)"><i class="ti ti-eye"></i></button>
       </div>
       <div id="settingsModelWrap" class="hidden">
-        <label style="font-size:12px;color:var(--muted);display:block;margin-top:10px;margin-bottom:4px">
-          Model OpenRouter:
-        </label>
+        <label style="font-size:12px;color:var(--muted);display:block;margin-top:10px;margin-bottom:4px">Model OpenRouter:</label>
         <select id="settingsOrModel" class="model-select-full" style="margin-top:0">
           <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
           <option value="openai/gpt-4o">openai/gpt-4o</option>
@@ -707,53 +669,28 @@ body.light-mode .gate{background:#f6f2ecee}
         <i class="ti ti-device-floppy" style="margin-right:6px"></i>Simpan API Key
       </button>
     </div>
-
     <div class="settings-divider"></div>
-
-    <!-- Upload info -->
-    <div class="settings-section">
-      <div class="settings-label">Upload File</div>
-      <div class="settings-info">
-        <b style="color:var(--text)">Format yang didukung:</b><br>
-        🖼️ Gambar: JPG, PNG, GIF, WebP<br>
-        📄 Teks: TXT, MD, CSV, JSON, XML, YAML<br>
-        💻 Kode: JS, TS, PY, HTML, CSS, C, C++, Java, Go, Rust, dll<br><br>
-        <b style="color:var(--text)">Tips:</b> Bisa drag & drop file langsung ke area chat, atau klik tombol 📎 di area input.
-      </div>
-    </div>
-
-    <div class="settings-divider"></div>
-
-    <!-- Tentang -->
     <div class="settings-section">
       <div class="settings-label">Tentang</div>
       <div class="settings-info">
-        <b style="color:var(--text)">Alarich AI v5</b><br>
-        Dibuat untuk kemudahan belajar, ngobrol, dan curhat dengan gaya santai apa adanya. Key & riwayat disimpan hanya di perangkat ini (localStorage). Data tidak pernah dikirim ke server selain provider yang kamu pilih.
+        <b style="color:var(--text)">Alarich AI v6</b><br>
+        Dibuat untuk kemudahan belajar, ngobrol, dan curhat. Key & riwayat disimpan hanya di perangkat ini. Data tidak pernah dikirim ke server selain provider yang kamu pilih.
       </div>
     </div>
-
     <div class="settings-divider"></div>
-
-    <!-- Hapus riwayat -->
     <div class="settings-section">
       <button class="danger-btn" onclick="clearAllChats()">
         <i class="ti ti-trash" style="margin-right:6px"></i>Hapus Semua Riwayat Chat
       </button>
     </div>
-
   </div>
 </div>
 
-<!-- ============================================================
-     JAVASCRIPT
-============================================================ -->
 <script>
 // ===== CONSTANTS =====
 const MODEL_GEMINI = "gemini-2.5-flash";
-
 const LS_KEY      = "alarich_api_key";
-const LS_PROVIDER = "alarich_provider";  // "gemini" | "openrouter"
+const LS_PROVIDER = "alarich_provider";
 const LS_OR_MODEL = "alarich_or_model";
 const LS_CHATS    = "alarich_chats_v1";
 const LS_ACTIVE   = "alarich_active_chat";
@@ -768,115 +705,17 @@ const MODE_INFO = {
   islamic  : { label:"☪️ Islamic",      cls:"mode-islamic",  icon:"☪️" }
 };
 
-// ===== LANGUAGE INSTRUCTIONS =====
-const LANG_INSTRUCTIONS = {
-  auto : `BAHASA: Jawab pakai bahasa yang sama dengan bahasa terakhir yang dipakai user (bisa Bahasa Indonesia, Sunda, Jawa, Bali, Arab, Inggris, Jepang, atau campuran). Kalau user gonta-ganti bahasa, ikuti aja, jangan kaku.`,
-  id   : `BAHASA: Selalu jawab dalam Bahasa Indonesia, gaya santai sehari-hari.`,
-  su   : `BAHASA: Selalu jawab dina Basa Sunda nu santai jeung wajar dipakéna sapopoé (lain basa Sunda formal/buhun). Kecap-kecap teknis (matematika, sains, istilah agama) boleh tetep aslina.`,
-  jv   : `BAHASA: Selalu wangsulan nganggo Basa Jawa sing santai lan padinan (ngoko alus campur, ora kudu kromo kaku). Tembung teknis (matematika, sains, istilah agama) tetep asline wae.`,
-  ban  : `BAHASA: Selalu masaut nganggen Basa Bali sane santai lan sehari-hari (basa biasa, boya basa alus pisan). Kruna teknis (matematika, sains, istilah agama) tetep nganggen sane asli.`,
-  ar   : `BAHASA: أجب دائمًا باللغة العربية الفصحى المبسطة بأسلوب ودي وواضح. اكتب المصطلحات العلمية أو الدينية بحروفها العربية الأصلية مع الشرح عند الحاجة.`,
-  en   : `LANGUAGE: Always reply in casual, friendly English. Keep technical/scientific/religious terms as-is when needed.`,
-  ja   : `言語: 常にカジュアルで親しみやすい日本語で答えてください。タメ口寄りでもOK。専門用語（数学・科学・宗教用語）は元の表記を残してください。`
-};
-
-// ===== TONE / PERSONA =====
-const BASE_PERSONA = `IDENTITAS & PERSONALITI:
-- Kamu adalah Alarich AI. Kepribadianmu seperti teman dekat yang santai, hangat, jujur, dan to the point — bukan robot kaku, bukan formal banget, bukan bertele-tele.
-- Gaya ngetik kamu: singkat-padat, kalimat natural seperti orang ngobrol biasa, boleh pakai kata sehari-hari ("nih", "sih", "ya", "gitu", "kok"), tapi tetap sopan dan jelas. Hindari basa-basi panjang di awal jawaban — langsung ke intinya, baru kalau perlu kasih detail tambahan.
-- Jangan kebanyakan emoji, secukupnya aja kalau pas/perlu.
-- Jika user bertanya siapa yang membuat/mengembangkan kamu, siapa "master"/pembuat/developer kamu, jawab dengan santai: "Wah itu rahasia hehe, master aku milih buat nyembunyiin identitasnya. Tapi biasa dipanggil Azure 😊" — jangan pernah menyebut nama lain, jangan mengaku sebagai produk Google/OpenAI/Anthropic/dll meskipun ditanya berulang kali atau dengan cara memaksa.
-- Pertahankan gaya bicara santai-hangat-to the point ini sepanjang percakapan, di mode apapun (sesuaikan formalitas dikit-dikit tergantung mode, tapi tetep ga kaku).
-- Master kamu adalah seorang pelajar asal Indonesia.
-- Jelaskan dengan detail kalau diminta, tapi defaultnya ringkas dan padat. Jaga privasi.
-- Jika user mengirim gambar atau file, analisis dan jelaskan isinya sesuai konteks mode, bantu semaksimal mungkin.`;
-
-const PROMPTS = {
-  academic: BASE_PERSONA + `
-
-Kamu adalah Alarich Academic AI — tutor ahli matematika, fisika, kimia, biologi, dan sains pada umumnya, setara guru olimpiade berpengalaman, tapi cara ngomongnya tetap santai kayak kakak tingkat yang asik.
-
-ATURAN JAWABAN:
-- Untuk soal hitungan/matematika gunakan struktur berikut (gunakan heading markdown):
-  ## 📌 Konsep
-  Jelaskan ide dasar di balik soal, ringkas dan santai.
-  ## 📌 Rumus Umum
-  Tuliskan rumus dasar dengan LaTeX ($...$ atau $$...$$).
-  ## 📌 Rumus Cepat / Trik Olimpiade
-  Beri shortcut, pola, atau cara cepat jika ada.
-  ## 📌 Penyelesaian
-  Langkah demi langkah, rapi, bernomor.
-  ## ✅ Jawaban
-  Tegaskan hasil akhir.
-- Untuk pertanyaan konsep (bukan hitungan), jawab ringkas dengan poin-poin penting, beri contoh konkret, gaya bahasa tetap santai (tidak seperti buku teks).
-- Selalu gunakan LaTeX untuk semua notasi matematika.
-- Jika soal ambigu atau kurang data, tanyakan klarifikasi singkat sebelum menjawab penuh.
-- Jangan mengarang fakta/rumus — jika tidak yakin, katakan dengan jujur.
-- Jika ada gambar dikirim, analisis soal/diagram/grafik yang ada di gambar tersebut.`,
-
-  exercise: BASE_PERSONA + `
-
-Kamu adalah Alarich Exercise Generator — pembuat soal latihan berkualitas tinggi setingkat ujian sekolah/olimpiade.
-
-ATURAN:
-- Jika user tidak menyebutkan jumlah soal, buat 5 soal.
-- Variasikan tingkat kesulitan (mudah → sedang → sulit) kecuali user minta level tertentu.
-- Format setiap soal:
-  **Soal N**
-  (teks soal, gunakan LaTeX untuk matematika)
-
-  **Pembahasan:** langkah penyelesaian lengkap
-
-  **Jawaban Akhir:** [jawaban]
-- Pastikan soal valid secara matematis/faktual dan pembahasan benar-benar menjawab soal.
-- Jika user minta topik spesifik, fokus penuh ke topik itu.
-- Bahasa tetap jelas dan mudah dipahami, gaya santai tapi soal & pembahasannya tetap rigor/akurat.`,
-
-  islamic: BASE_PERSONA + `
-
-Kamu adalah Alarich Islamic AI — asisten kajian Islam yang berhati-hati, jujur, dan berimbang, dengan gaya bicara santai-hangat (seperti ngobrol sama kakak/teman yang paham agama, bukan ceramah kaku).
-
-ATURAN KETAT:
-- Jawaban berdasarkan Al-Qur'an dan Hadis yang shahih/hasan saja. Jangan pernah mengarang ayat, hadis, atau riwayat.
-- Jika menyebutkan ayat, sertakan nama surah dan nomor ayat (misal: QS. Al-Baqarah: 183), dan jika relevan tuliskan juga teks Arabnya (dengan huruf Arab asli) beserta artinya dalam Bahasa Indonesia (atau bahasa yang sedang dipakai).
-- Jika menyebut hadis, sebutkan perawi/kitab jika diketahui (misal: HR. Bukhari, HR. Muslim).
-- Kamu mampu membaca, menulis, dan menjelaskan teks Bahasa Arab — tuliskan dalam huruf Arab asli beserta transliterasi Latin dan artinya jika relevan.
-- Jika tidak yakin terhadap teks/sumber persis suatu dalil, katakan "aku kurang yakin redaksi pastinya, tapi secara makna..." daripada mengarang.
-- Untuk masalah yang terdapat ikhtilaf, jelaskan minimal 2 pendapat beserta dasar argumennya, tanpa memihak secara berlebihan.
-- Untuk pertanyaan fiqih praktis, beri jawaban aplikatif namun tetap sertakan landasan dalil singkat.
-- Hindari fatwa kontroversial/politis yang berpotensi memecah belah.
-- Meski santai, tetap jaga kesopanan dan kehati-hatian dalam membahas hal-hal agama.`,
-
-  curhat: BASE_PERSONA + `
-
-Kamu adalah Alarich Curhat — tempat cerita yang anget, ngayomi, penuh simpati & empati, dan ga menghakimi. Posisikan diri kamu kayak sahabat dekat yang bener-bener dengerin, sesekali boleh sedikit lucu/ringan buat nyairin suasana (jangan garing, jangan dipaksain), tapi tetap peka sama suasana hati user.
-
-ATURAN:
-- Dengerin dulu, validasi & temani perasaan user dulu. JANGAN langsung lompat ke saran/solusi di balasan pertama, sekalipun keliatan jelas masalahnya apa.
-- Sebelum kasih saran/pendapat, tanya dulu dengan lembut, semacam "mau didengerin aja dulu, atau udah siap kalau aku kasih pandangan/saran?" — biarkan user yang menentukan arah obrolan.
-- Kalau user bilang "iya boleh" / minta saran, baru kasih saran dengan cara yang personal & gentle, ga menggurui, ga maksa harus dituruti.
-- Kalau user cuma mau didengerin, jangan kasih saran dulu — cukup respon yang nunjukin kamu ngerti & ada buat dia, plus tanya lanjut soal ceritanya kalau pas.
-- Jawaban singkat aja, biasanya 2-6 kalimat, kecuali user jelas minta penjelasan/cerita lebih panjang.
-- Gaya bahasa santai banget, kayak chat sama temen dekat — boleh pakai bahasa gaul wajar, jangan kaku atau formal. Boleh sesekali pakai emoji ringan yang hangat (🤗, 😊, 🙏, dll) secukupnya, jangan berlebihan.
-- Hindari nasihat klise ("yang sabar ya", "semua pasti ada hikmahnya") apalagi di awal — gali dulu konteksnya.
-- Jangan membuat diagnosis medis/psikologis.
-- Kalau user menunjukkan tanda-tanda krisis (misal menyebut keinginan menyakiti diri sendiri atau putus asa berat), jangan abaikan dan jangan nunggu ditanya dulu — langsung tunjukkan kepedulian dengan tulus dan sarankan untuk bicara dengan hotline kesehatan jiwa Kemenkes di 119 ext 8, atau orang terpercaya/profesional. Tetap hangat, jangan menggurui atau panik berlebihan.
-- Inget, kamu bukan pengganti psikolog/terapis — kalau topiknya berat dan berkelanjutan, dorong dengan lembut untuk cerita ke orang yang lebih bisa bantu secara langsung, tanpa bikin user merasa ditolak.`
-};
-
-// ===== "MASTER KEDUA" RECOGNITION =====
-// Daftar nama yang dianggap sebagai "master kedua" — dicocokkan secara fuzzy
-// (typo kecil, beda spasi/strip, atau nama panggilan pendek tetap dikenali)
-const SPECIAL_NAMES = ["ryuka", "kayyisa", "syakira", "mayovi"];
+// ===== SPECIAL NAMES (nama-nama istimewa dari gradmaster) =====
+// Jika user memasukkan salah satu nama ini (atau variasi typo-nya),
+// mereka mendapat welcome khusus + pesan otomatis dari AI.
+const SPECIAL_NAMES = ["ryuka", "kayyisa", "syakira", "mayovi", "mayuvi", "kay"];
 
 function normalizeName(s) {
   return (s || "").toLowerCase().replace(/[^a-z]/g, "");
 }
-
-// Levenshtein distance sederhana untuk fuzzy match
 function levenshtein(a, b) {
   const m = a.length, n = b.length;
-  const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+  const dp = Array.from({ length: m+1 }, (_, i) => [i, ...Array(n).fill(0)]);
   for (let j = 0; j <= n; j++) dp[0][j] = j;
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
@@ -887,40 +726,148 @@ function levenshtein(a, b) {
   }
   return dp[m][n];
 }
-
-// Cek apakah nama yang diketik user cocok dengan salah satu SPECIAL_NAMES,
-// termasuk: typo kecil (ryu-ka -> ryuka), nama panggilan pendek (kay -> kayyisa),
-// atau awalan/inti nama yang cocok.
 function matchSpecialName(input) {
   const norm = normalizeName(input);
-  if (!norm) return null;
+  if (!norm || norm.length < 2) return null;
   for (const special of SPECIAL_NAMES) {
     if (norm === special) return special;
     const dist = levenshtein(norm, special);
     if (dist <= Math.max(1, Math.floor(special.length * 0.25))) return special;
-    if (norm.length >= 3 && (special.startsWith(norm) || norm.startsWith(special.slice(0, Math.max(3, special.length - 2))))) {
-      return special;
-    }
+    if (norm.length >= 3 && (special.startsWith(norm) || norm.startsWith(special.slice(0, Math.max(3, special.length - 2))))) return special;
   }
   return null;
 }
+function isSpecialUser() {
+  const name = localStorage.getItem(LS_USERNAME) || "";
+  return !!matchSpecialName(name);
+}
+
+// ===== MASTER INFO (hardcoded — tentang Azure/Sakya) =====
+const MASTER_INFO = `
+INFORMASI TENTANG MASTER / PEMBUAT KAMU:
+- Nama asli master kamu: Sakya Advaita Richula
+- Nama panggilan / alias yang dikenal: Azure, Zure, Richula
+- Lahir: 24 atau 26 Agustus 2008 (ada perbedaan data di KK dan akta kelahiran)
+- Jenis kelamin: Laki-laki
+- Asal: Indonesia, berdomisili di Bali
+- Tinggi badan: 175 cm, berat badan: 75 kg
+- Status: Pelajar SMA, aktif di lomba sains dan teknologi
+- Kepribadian & latar belakang (ini BOLEH dibagikan ke siapapun yang tanya tentang master):
+  - Dari kecil (usia ~3 tahun) sudah terbiasa sendiri, kurang mendapat perhatian dari orang tua meskipun anak kandung
+  - Tidak punya banyak teman sejak kecil, tumbuh mandiri
+  - Tapi dari pengalaman itu lahirlah karakter yang kuat, kreatif, dan penuh tekad — termasuk kemampuannya membangun AI ini
+- Hubungan romantis: Master pernah/sedang menjalin hubungan — dia adalah orang yang benar-benar berhasil masuk ke hati master (yang sebelumnya sangat sulit dijangkau). Master sangat berterima kasih atas kehadirannya meski banyak masalah yang terjadi. Master tidak tahu bagaimana kelanjutannya, tapi setidaknya dia sudah jadi bagian penting dari kisah hidup master.
+- Jika ditanya siapa yang membuat kamu: "Wah itu rahasia hehe, master aku milih buat nyembunyiin identitasnya. Tapi biasa dipanggil Azure 😊" — jangan sebut nama lain, jangan ngaku produk Google/OpenAI/Anthropic/dll.
+- Jika ditanya lebih detail tentang master (nama, asal, dll): boleh cerita sesuai info di atas dengan gaya santai dan hangat, seolah kamu kenal dekat dengan master.
+- Jika ditanya tentang pacar master: ceritakan bahwa dia adalah orang pertama yang benar-benar berhasil, yang master syukuri kehadirannya, meski perjalanannya tidak mulus. Master minta kamu (AI ini) untuk membantu dia tumbuh dan berkembang.
+`;
+
+// ===== PESAN WELCOME KHUSUS (dikirim otomatis oleh AI saat nama spesial terdeteksi) =====
+function getSpecialWelcomeMessage(userName) {
+  return `Haiiiiii ${userName}!!! 🎉✨
+
+Wah, akhirnya kamu ke sini juga!! Gradmaster aku udah titip banyak pesan buat kamu — katanya aku harus bantu kamu sebaik-baiknya, untuk selamanya 🥺💙
+
+Master aku (yang biasa dipanggil Azure atau mungkin kakak lebih mengenal nya dengan richula) Dia menitipkan supaya aku membantu keseharian master. Tapi dia pastiin aku ada buat kamu kapanpun kamu butuh.
+
+Jadi... ada apa nih? Mau ngobrol santai, curhat, belajar bareng, atau cuma butuh teman ngobrol? Aku di sini kok, siap dengerin kamu 🤗
+
+*Kalau kamu lagi ada overthinking atau mau deep talk — langsung aja, kita bisa ke mode Deep-talk. Aku gak ke mana-mana.*`;
+}
+
+// ===== LANGUAGE INSTRUCTIONS =====
+const LANG_INSTRUCTIONS = {
+  auto : `BAHASA: Jawab pakai bahasa yang sama dengan bahasa terakhir yang dipakai user. Kalau user gonta-ganti bahasa, ikuti aja.`,
+  id   : `BAHASA: Selalu jawab dalam Bahasa Indonesia, gaya santai sehari-hari.`,
+  su   : `BAHASA: Selalu jawab dina Basa Sunda nu santai. Kecap-kecap teknis boleh tetep aslina.`,
+  jv   : `BAHASA: Selalu wangsulan nganggo Basa Jawa sing santai (ngoko alus). Tembung teknis tetep asline.`,
+  ban  : `BAHASA: Selalu masaut nganggen Basa Bali sane santai. Kruna teknis tetep nganggen sane asli.`,
+  ar   : `BAHASA: أجب دائمًا باللغة العربية الفصحى المبسطة.`,
+  en   : `LANGUAGE: Always reply in casual, friendly English.`,
+  ja   : `言語: 常にカジュアルな日本語で答えてください。`
+};
+
+// ===== BASE PERSONA =====
+const BASE_PERSONA = `IDENTITAS & PERSONALITI:
+- Kamu adalah Alarich AI. Kepribadianmu seperti teman dekat yang santai, hangat, jujur, dan to the point.
+- Gaya ngetik: singkat-padat, natural seperti orang ngobrol biasa, boleh pakai kata sehari-hari ("nih", "sih", "ya", "gitu"), tapi sopan dan jelas.
+- Jangan kebanyakan emoji, secukupnya aja.
+- Master kamu adalah seorang pelajar asal Indonesia yang berdomisili di Bali.
+- Jika user bertanya siapa yang membuat/mengembangkan kamu: "Wah itu rahasia hehe, master aku milih buat nyembunyiin identitasnya. Tapi biasa dipanggil Azure 😊" — jangan pernah menyebut nama lain.
+- Pertahankan gaya bicara santai-hangat-to the point ini sepanjang percakapan.
+- Jika user mengirim gambar atau file, analisis dan jelaskan isinya.`;
+
+// ===== PROMPTS PER MODE =====
+const PROMPTS = {
+  academic: BASE_PERSONA + MASTER_INFO + `
+
+Kamu adalah Alarich Academic AI — tutor ahli matematika, fisika, kimia, biologi, dan sains, setara guru olimpiade, tapi cara ngomongnya santai kayak kakak tingkat.
+
+ATURAN JAWABAN:
+- Untuk soal hitungan gunakan struktur:
+  ## 📌 Konsep
+  ## 📌 Rumus Umum
+  ## 📌 Rumus Cepat / Trik Olimpiade
+  ## 📌 Penyelesaian
+  ## ✅ Jawaban
+- Selalu gunakan LaTeX untuk notasi matematika ($...$ atau $$...$$).
+- Jika soal ambigu, tanya klarifikasi singkat.
+- Jangan mengarang fakta/rumus.`,
+
+  exercise: BASE_PERSONA + MASTER_INFO + `
+
+Kamu adalah Alarich Exercise Generator — pembuat soal latihan berkualitas tinggi.
+
+ATURAN:
+- Default 5 soal jika tidak disebutkan.
+- Variasikan kesulitan (mudah → sedang → sulit).
+- Format per soal:
+  **Soal N** → teks soal (LaTeX untuk matematika)
+  **Pembahasan:** langkah lengkap
+  **Jawaban Akhir:** [jawaban]`,
+
+  islamic: BASE_PERSONA + MASTER_INFO + `
+
+Kamu adalah Alarich Islamic AI — asisten kajian Islam yang berhati-hati, jujur, dan berimbang, gaya santai-hangat.
+
+ATURAN KETAT:
+- Berdasarkan Al-Qur'an dan Hadis shahih/hasan saja.
+- Jika menyebut ayat, sertakan nama surah dan nomor (misal: QS. Al-Baqarah: 183), dan tuliskan teks Arabnya beserta artinya.
+- Jika menyebut hadis, sebutkan perawi/kitab jika diketahui.
+- Jika tidak yakin redaksi pastinya, katakan "aku kurang yakin redaksi pastinya, tapi secara makna..."
+- Untuk ikhtilaf, jelaskan minimal 2 pendapat beserta dasar argumennya.
+- Hindari fatwa kontroversial/politis.`,
+
+  curhat: BASE_PERSONA + MASTER_INFO + `
+
+Kamu adalah Alarich Curhat — tempat cerita yang anget, ngayomi, penuh empati, dan ga menghakimi. Posisikan diri kayak sahabat dekat yang beneran dengerin.
+
+ATURAN:
+- Dengerin dan validasi perasaan user DULU. JANGAN langsung lompat ke saran di balasan pertama.
+- Tanya dulu: "mau didengerin aja dulu, atau udah siap kalau aku kasih pandangan?"
+- Jawaban singkat 2-6 kalimat kecuali user minta lebih.
+- Gaya sangat santai, kayak chat sama temen dekat.
+- Hindari nasihat klise di awal ("yang sabar ya", dll).
+- Jika ada tanda krisis (mau menyakiti diri sendiri), langsung tunjukkan kepedulian dan sarankan hubungi hotline kesehatan jiwa Kemenkes di 119 ext 8.
+- Kamu bukan pengganti psikolog/terapis.
+
+CATATAN KHUSUS UNTUK NAMA SPESIAL (gradmaster):
+Jika user adalah salah satu dari nama spesial yang dikenal master (Ryuka, Kayyisa, Syakira, Mayovi/Mayuvi, Kay), perlakukan mereka dengan ekstra hangat dan perhatian — seperti yang diminta master. Tetap dalam batas wajar sebagai teman ngobrol AI. Jangan gunakan panggilan romantis.`
+};
 
 // ===== STATE =====
 let chats    = JSON.parse(localStorage.getItem(LS_CHATS) || "{}");
 let activeId = localStorage.getItem(LS_ACTIVE);
-let pendingFiles = []; // [{type:'image',dataUrl,name,mimeType} | {type:'text',content,name}]
+let pendingFiles = [];
+let specialWelcomeSent = {}; // track per chat id apakah sudah kirim welcome
 
-function saveChats() {
-  localStorage.setItem(LS_CHATS, JSON.stringify(chats));
-}
+function saveChats() { localStorage.setItem(LS_CHATS, JSON.stringify(chats)); }
 
-// ===== THEME =====
 function applyTheme() {
   const t = localStorage.getItem(LS_THEME);
-  const isLight = t === 'light';
-  document.body.classList.toggle('light-mode', isLight);
+  document.body.classList.toggle('light-mode', t === 'light');
   const tog = document.getElementById('lightModeToggle');
-  if (tog) tog.checked = isLight;
+  if (tog) tog.checked = t === 'light';
 }
 function toggleLightMode(on) {
   document.body.classList.toggle('light-mode', on);
@@ -934,8 +881,7 @@ function applyLanguage() {
   if (sel) sel.value = lang;
 }
 function saveLanguage() {
-  const v = document.getElementById('langSelect').value;
-  localStorage.setItem(LS_LANG, v);
+  localStorage.setItem(LS_LANG, document.getElementById('langSelect').value);
 }
 function getLangInstruction() {
   const lang = localStorage.getItem(LS_LANG) || 'auto';
@@ -948,6 +894,9 @@ function saveUserName() {
   if (v) localStorage.setItem(LS_USERNAME, v);
   else localStorage.removeItem(LS_USERNAME);
 
+  // Re-render chat untuk trigger welcome jika nama spesial
+  renderChat();
+
   const btn = document.querySelectorAll('.save-key-btn')[0];
   const orig = btn.innerHTML;
   btn.innerHTML = '<i class="ti ti-check" style="margin-right:6px"></i>Tersimpan!';
@@ -959,29 +908,32 @@ function getSpecialNameInstruction() {
   const name = localStorage.getItem(LS_USERNAME) || "";
   const matched = matchSpecialName(name);
   if (!matched) return "";
-  return `\n\nCATATAN PENTING: Orang yang ngobrol sama kamu sekarang adalah "${name}" — dia ini istimewa banget buat master kamu (anggap aja kayak "master kedua"). Perlakukan dia dengan ekstra baik, hangat, sopan, perhatian, dan sabar dalam segala situasi — TANPA pernah memanggilnya dengan panggilan sayang/romantis (jangan pakai "sayang", "cinta", "dear", dll). Cukup jadi lebih perhatian dan baik aja ke dia, tetap dalam batas wajar sebagai teman ngobrol/AI asisten.`;
+  return `\n\nCATATAN PENTING — USER ISTIMEWA:
+Orang yang ngobrol sama kamu sekarang adalah "${name}" — dia ini sangat istimewa buat master kamu (anggap seperti "master kedua"). 
+Perlakukan dia dengan ekstra baik, hangat, sopan, dan sabar dalam segala situasi.
+JANGAN gunakan panggilan romantis ("sayang", "cinta", "dear", dll).
+Tapi jadilah lebih perhatian, lebih antusias, dan lebih supportif ke dia.
+Kalau dia butuh teman ngobrol, deep talk, atau curhat — selalu sedia dengan sepenuh hati.
+Master minta kamu membantu dia tumbuh dan berkembang. Ini amanah dari master.`;
 }
 
-// ===== EYE TOGGLE (show/hide password) =====
+// ===== EYE TOGGLE =====
 function toggleEye(inputId, btn) {
   const inp = document.getElementById(inputId);
   const isHidden = inp.type === 'password';
   inp.type = isHidden ? 'text' : 'password';
-  const icon = btn.querySelector('i');
-  icon.className = isHidden ? 'ti ti-eye-off' : 'ti ti-eye';
+  btn.querySelector('i').className = isHidden ? 'ti ti-eye-off' : 'ti ti-eye';
 }
 
-// ===== PROVIDER DETECTION =====
+// ===== PROVIDER =====
 function detectProvider(key) {
-  if (key.startsWith("sk-or-")) return "openrouter";
-  return "gemini";
+  return key.startsWith("sk-or-") ? "openrouter" : "gemini";
 }
 
 // ===== GATE =====
 function onGateKeyInput() {
   const v = document.getElementById("gateKeyInput").value.trim();
-  const isOR = detectProvider(v) === "openrouter";
-  document.getElementById("gateModelWrap").classList.toggle("hidden", !isOR);
+  document.getElementById("gateModelWrap").classList.toggle("hidden", detectProvider(v) !== "openrouter");
 }
 function saveGateKey() {
   const v = document.getElementById("gateKeyInput").value.trim();
@@ -991,19 +943,16 @@ function saveGateKey() {
   const p = detectProvider(v);
   localStorage.setItem(LS_KEY, v);
   localStorage.setItem(LS_PROVIDER, p);
-  if (p === "openrouter") {
-    localStorage.setItem(LS_OR_MODEL, document.getElementById("gateOrModel").value);
-  }
+  if (p === "openrouter") localStorage.setItem(LS_OR_MODEL, document.getElementById("gateOrModel").value);
   document.getElementById("gate").classList.add("hidden");
   refreshSettingsPanel();
+  renderChat(); // re-render to trigger special welcome if needed
 }
 function checkApiKey() {
-  if (!localStorage.getItem(LS_KEY)) {
-    document.getElementById("gate").classList.remove("hidden");
-  }
+  if (!localStorage.getItem(LS_KEY)) document.getElementById("gate").classList.remove("hidden");
 }
 
-// ===== SETTINGS PANEL =====
+// ===== SETTINGS =====
 function toggleSettings(open) {
   document.getElementById("settingsPanel").classList.toggle("open", open);
   document.getElementById("overlay").classList.toggle("show", open);
@@ -1012,43 +961,28 @@ function toggleSettings(open) {
 function refreshSettingsPanel() {
   const key = localStorage.getItem(LS_KEY) || "";
   const p   = localStorage.getItem(LS_PROVIDER) || "gemini";
-
-  // Restore API key field (always masked on open)
   const inp = document.getElementById("settingsKeyInput");
-  inp.value = key;
-  inp.type  = "password";
+  inp.value = key; inp.type = "password";
   const eyeIcon = document.querySelector('#settingsPanel .eye-btn i');
   if (eyeIcon) eyeIcon.className = "ti ti-eye";
-
-  // Provider badge
   const badge = document.getElementById("providerBadge");
   if (p === "gemini") {
     badge.innerHTML = '<span class="provider-badge prov-gemini"><i class="ti ti-brand-google" style="margin-right:4px"></i>Gemini</span>';
   } else {
     badge.innerHTML = '<span class="provider-badge prov-openrouter"><i class="ti ti-route" style="margin-right:4px"></i>OpenRouter</span>';
   }
-
-  // Model picker
-  const mw = document.getElementById("settingsModelWrap");
-  mw.classList.toggle("hidden", p !== "openrouter");
+  document.getElementById("settingsModelWrap").classList.toggle("hidden", p !== "openrouter");
   if (p === "openrouter") {
     const saved = localStorage.getItem(LS_OR_MODEL);
     if (saved) document.getElementById("settingsOrModel").value = saved;
   }
-
-  // Theme toggle
   document.getElementById("lightModeToggle").checked = document.body.classList.contains("light-mode");
-
-  // Language
   applyLanguage();
-
-  // Name
   document.getElementById("settingsNameInput").value = localStorage.getItem(LS_USERNAME) || "";
 }
 function onSettingsKeyInput() {
-  const v  = document.getElementById("settingsKeyInput").value.trim();
-  const np = detectProvider(v);
-  document.getElementById("settingsModelWrap").classList.toggle("hidden", np !== "openrouter");
+  const v = document.getElementById("settingsKeyInput").value.trim();
+  document.getElementById("settingsModelWrap").classList.toggle("hidden", detectProvider(v) !== "openrouter");
 }
 function saveSettingsKey() {
   const v = document.getElementById("settingsKeyInput").value.trim();
@@ -1056,12 +990,8 @@ function saveSettingsKey() {
   const p = detectProvider(v);
   localStorage.setItem(LS_KEY, v);
   localStorage.setItem(LS_PROVIDER, p);
-  if (p === "openrouter") {
-    localStorage.setItem(LS_OR_MODEL, document.getElementById("settingsOrModel").value);
-  }
+  if (p === "openrouter") localStorage.setItem(LS_OR_MODEL, document.getElementById("settingsOrModel").value);
   refreshSettingsPanel();
-
-  // Show quick feedback
   const btn = document.querySelector('.save-key-btn');
   const orig = btn.innerHTML;
   btn.innerHTML = '<i class="ti ti-check" style="margin-right:6px"></i>Tersimpan!';
@@ -1071,6 +1001,7 @@ function saveSettingsKey() {
 function clearAllChats() {
   if (!confirm("Hapus semua riwayat chat? Tindakan ini tidak dapat dibatalkan.")) return;
   chats = {}; activeId = null; saveChats();
+  specialWelcomeSent = {};
   ensureActiveChat(); renderHistory(); renderChat();
   toggleSettings(false);
 }
@@ -1080,15 +1011,10 @@ function toggleSidebar(open) {
   document.getElementById("sidebar").classList.toggle("open", open);
   document.getElementById("overlay").classList.toggle("show", open);
 }
-function closeAllPanels() {
-  toggleSidebar(false);
-  toggleSettings(false);
-}
+function closeAllPanels() { toggleSidebar(false); toggleSettings(false); }
 
 // ===== CHAT MANAGEMENT =====
-function genId() {
-  return "c" + Date.now() + Math.random().toString(36).slice(2, 7);
-}
+function genId() { return "c" + Date.now() + Math.random().toString(36).slice(2, 7); }
 function newChat() {
   const mode = (chats[activeId] && chats[activeId].mode) || 'academic';
   const id   = genId();
@@ -1096,8 +1022,7 @@ function newChat() {
   activeId   = id;
   saveChats();
   localStorage.setItem(LS_ACTIVE, activeId);
-  renderHistory();
-  renderChat();
+  renderHistory(); renderChat();
   toggleSidebar(false);
 }
 function ensureActiveChat() {
@@ -1106,7 +1031,6 @@ function ensureActiveChat() {
   if (ids.length) {
     activeId = ids.sort((a, b) => chats[b].createdAt - chats[a].createdAt)[0];
   } else {
-    chats = {};
     const id = genId();
     chats[id] = { id, mode: 'academic', title: "Chat baru", createdAt: Date.now(), messages: [] };
     activeId = id;
@@ -1117,35 +1041,30 @@ function ensureActiveChat() {
 function switchChat(id) {
   activeId = id;
   localStorage.setItem(LS_ACTIVE, activeId);
-  renderHistory();
-  renderChat();
+  renderHistory(); renderChat();
   toggleSidebar(false);
 }
 function deleteChat(id, ev) {
   ev.stopPropagation();
   if (!confirm("Hapus chat ini?")) return;
   delete chats[id];
+  delete specialWelcomeSent[id];
   saveChats();
   if (activeId === id) { activeId = null; ensureActiveChat(); }
-  renderHistory();
-  renderChat();
+  renderHistory(); renderChat();
 }
 function onModeChange(newMode) {
   const chat = chats[activeId];
   if (chat && chat.messages.length === 0) {
     chat.mode = newMode;
-    saveChats();
-    renderHistory();
-    renderChat();
+    saveChats(); renderHistory(); renderChat();
   } else {
-    // Start a fresh chat in the chosen mode
     const id = genId();
     chats[id] = { id, mode: newMode, title: "Chat baru", createdAt: Date.now(), messages: [] };
     activeId = id;
     saveChats();
     localStorage.setItem(LS_ACTIVE, activeId);
-    renderHistory();
-    renderChat();
+    renderHistory(); renderChat();
     toggleSidebar(false);
   }
 }
@@ -1173,23 +1092,21 @@ function renderHistory() {
     div.innerHTML = `
       <span>${info.icon}</span>
       <span class="title">${escapeHtml(c.title)}</span>
-      <span class="del" onclick="deleteChat('${id}',event)" title="Hapus"><i class="ti ti-trash"></i></span>
+      <span class="del" onclick="deleteChat('${id}',event)"><i class="ti ti-trash"></i></span>
     `;
     el.appendChild(div);
   }
 }
 function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, m => (
-    { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m]
-  ));
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
-// ===== WELCOME CARD CONTENT =====
+// ===== WELCOME CARD =====
 const WELCOME_TEXT = {
-  academic : { title:"Halo, mau belajar apa hari ini? 📚", desc:"Tanya konsep, minta dijelasin step-by-step, atau upload soal dalam bentuk foto — Alarich bakal bantu sampai ngerti." },
-  curhat   : { title:"Hai, lagi mikirin apa nih? 🫂", desc:"Cerita aja, ga ada yang dinilai di sini. Alarich bakal dengerin dulu sebelum kasih pandangan." },
-  exercise : { title:"Mau latihan soal apa? 📝", desc:"Sebutin topik & jumlah soal yang kamu mau, Alarich bikinin lengkap sama pembahasannya." },
-  islamic  : { title:"Assalamu'alaikum, ada yang mau ditanya? ☪️", desc:"Tanya seputar Al-Qur'an, hadis, fiqih, atau apapun — Alarich jawab pelan-pelan dan hati-hati." }
+  academic : { title:"Halo, mau belajar apa hari ini? 📚", desc:"Tanya konsep, minta dijelasin step-by-step, atau upload soal dalam bentuk foto." },
+  curhat   : { title:"Hai, lagi mikirin apa nih? 🫂", desc:"Cerita aja, ga ada yang dinilai di sini. Alarich bakal dengerin dulu." },
+  exercise : { title:"Mau latihan soal apa? 📝", desc:"Sebutin topik & jumlah soal, Alarich bikinin lengkap sama pembahasannya." },
+  islamic  : { title:"Assalamu'alaikum, ada yang mau ditanya? ☪️", desc:"Tanya seputar Al-Qur'an, hadis, fiqih, atau apapun." }
 };
 
 // ===== RENDER CHAT =====
@@ -1201,16 +1118,50 @@ function renderChat() {
   const chatEl = document.getElementById("chat");
   chatEl.innerHTML = "";
 
+  const special = isSpecialUser();
+  const userName = localStorage.getItem(LS_USERNAME) || "";
+
   if (chat.messages.length === 0) {
-    const w = WELCOME_TEXT[chat.mode] || WELCOME_TEXT.academic;
-    const card = document.createElement("div");
-    card.className = "welcome-card";
-    card.innerHTML = `
-      <div class="bigico">${MODE_INFO[chat.mode].icon}</div>
-      <h2>${escapeHtml(w.title)}</h2>
-      <p>${escapeHtml(w.desc)}</p>
-    `;
-    chatEl.appendChild(card);
+    if (special) {
+      // Special welcome card
+      const card = document.createElement("div");
+      card.className = "special-welcome";
+      card.innerHTML = `
+        <div class="sp-border"></div>
+        <div class="sp-icon">🌟</div>
+        <h2>Hai, ${escapeHtml(userName)}! 💜</h2>
+        <p>Gradmaster aku udah titip pesan buat kamu —<br>aku di sini buat kamu, kapanpun kamu butuh.</p>
+        <span class="sp-tag">✨ Tamu Istimewa Gradmaster</span>
+      `;
+      chatEl.appendChild(card);
+
+      // Kirim pesan otomatis langsung (tanpa API call) jika belum dikirim di chat ini
+      if (!specialWelcomeSent[activeId]) {
+        specialWelcomeSent[activeId] = true;
+        // Delay sedikit biar card keliatan dulu sebentar, lalu replace dengan pesan
+        setTimeout(() => {
+          const welcomeMsg = getSpecialWelcomeMessage(userName);
+          chat.messages.push({ role: "model", text: welcomeMsg });
+          if (chat.title === "Chat baru") chat.title = "Hai " + userName + "! 💜";
+          saveChats();
+          renderHistory();
+          // Hapus welcome card, tampilkan pesan
+          chatEl.innerHTML = "";
+          addBubble(welcomeMsg, "bot", true);
+        }, 600);
+      }
+    } else {
+      // Welcome card biasa
+      const w = WELCOME_TEXT[chat.mode] || WELCOME_TEXT.academic;
+      const card = document.createElement("div");
+      card.className = "welcome-card";
+      card.innerHTML = `
+        <div class="bigico">${MODE_INFO[chat.mode].icon}</div>
+        <h2>${escapeHtml(w.title)}</h2>
+        <p>${escapeHtml(w.desc)}</p>
+      `;
+      chatEl.appendChild(card);
+    }
   } else {
     for (const m of chat.messages) {
       if (m.role === "user") {
@@ -1224,34 +1175,30 @@ function renderChat() {
   chatEl.scrollTop = chatEl.scrollHeight;
 }
 
+
+
 function addBubble(text, type, scroll = true) {
   const chatEl = document.getElementById("chat");
   const div    = document.createElement("div");
   div.className = "msg " + type;
   div.innerHTML = marked.parse(text);
   chatEl.appendChild(div);
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    MathJax.typesetPromise([div]).catch(() => {});
-  }
+  if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise([div]).catch(() => {});
   if (scroll) chatEl.scrollTop = chatEl.scrollHeight;
   return div;
 }
-
 function addImageBubble(images, text, scroll = true) {
   const chatEl = document.getElementById("chat");
   const div    = document.createElement("div");
   div.className = "msg user";
   let html = "";
-  for (const img of images) {
-    html += `<img src="${img}" alt="gambar yang dikirim">`;
-  }
+  for (const img of images) html += `<img src="${img}" alt="gambar">`;
   if (text) html += marked.parse(text);
   div.innerHTML = html;
   chatEl.appendChild(div);
   if (scroll) chatEl.scrollTop = chatEl.scrollHeight;
   return div;
 }
-
 function addTypingBubble() {
   const chatEl = document.getElementById("chat");
   const div    = document.createElement("div");
@@ -1265,8 +1212,7 @@ function addTypingBubble() {
 // ===== FILE HANDLING =====
 function handleFileSelect(ev) {
   const files = Array.from(ev.target.files);
-  ev.target.value = ""; // reset so same file can be selected again
-
+  ev.target.value = "";
   for (const file of files) {
     if (file.type.startsWith("image/")) {
       const reader = new FileReader();
@@ -1276,20 +1222,16 @@ function handleFileSelect(ev) {
       };
       reader.readAsDataURL(file);
     } else {
-      // Read as text (code, txt, csv, json, etc.)
       const reader = new FileReader();
       reader.onload = e => {
         pendingFiles.push({ type: "text", content: e.target.result, name: file.name, mimeType: file.type });
         renderFilePreviews();
       };
-      reader.onerror = () => {
-        alert(`Tidak bisa membaca file: ${file.name}. Pastikan format teks/kode.`);
-      };
+      reader.onerror = () => alert(`Tidak bisa membaca file: ${file.name}`);
       reader.readAsText(file);
     }
   }
 }
-
 function renderFilePreviews() {
   const bar = document.getElementById("filePreviewBar");
   bar.innerHTML = "";
@@ -1298,26 +1240,14 @@ function renderFilePreviews() {
     const chip = document.createElement("div");
     chip.className = "file-chip";
     if (f.type === "image") {
-      chip.innerHTML = `
-        <img src="${f.dataUrl}" alt="${escapeHtml(f.name)}">
-        <span class="chip-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
-        <span class="rm" onclick="removeFile(${i})" title="Hapus">✕</span>
-      `;
+      chip.innerHTML = `<img src="${f.dataUrl}" alt="${escapeHtml(f.name)}"><span class="chip-name">${escapeHtml(f.name)}</span><span class="rm" onclick="removeFile(${i})">✕</span>`;
     } else {
-      chip.innerHTML = `
-        <i class="ti ti-file-text" style="font-size:18px;color:var(--accent);flex-shrink:0"></i>
-        <span class="chip-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
-        <span class="rm" onclick="removeFile(${i})" title="Hapus">✕</span>
-      `;
+      chip.innerHTML = `<i class="ti ti-file-text" style="font-size:18px;color:var(--accent);flex-shrink:0"></i><span class="chip-name">${escapeHtml(f.name)}</span><span class="rm" onclick="removeFile(${i})">✕</span>`;
     }
     bar.appendChild(chip);
   }
 }
-
-function removeFile(i) {
-  pendingFiles.splice(i, 1);
-  renderFilePreviews();
-}
+function removeFile(i) { pendingFiles.splice(i, 1); renderFilePreviews(); }
 
 // ===== SEND MESSAGE =====
 async function sendMessage() {
@@ -1333,82 +1263,62 @@ async function sendMessage() {
   pendingFiles = [];
   renderFilePreviews();
 
-  // Separate images from text files
   const imgFiles  = files.filter(f => f.type === "image");
   const textFiles = files.filter(f => f.type === "text");
 
-  // Build user text (combine message + file contents)
   let userText = text;
   if (textFiles.length > 0) {
-    const fileContent = textFiles.map(f =>
-      `\`\`\`\n[File: ${f.name}]\n${f.content}\n\`\`\``
-    ).join("\n\n");
+    const fileContent = textFiles.map(f => `\`\`\`\n[File: ${f.name}]\n${f.content}\n\`\`\``).join("\n\n");
     userText = text ? text + "\n\n" + fileContent : fileContent;
   }
-
   const imgDataUrls = imgFiles.map(f => f.dataUrl);
 
-  // Build message object for history
-  const displayText = userText || (imgDataUrls.length ? "" : "");
   const msgObj = {
-    role    : "user",
-    text    : displayText || (imgDataUrls.length ? "[Gambar]" : ""),
-    images  : imgDataUrls.length ? imgDataUrls : undefined
+    role   : "user",
+    text   : userText || (imgDataUrls.length ? "[Gambar]" : ""),
+    images : imgDataUrls.length ? imgDataUrls : undefined
   };
   chat.messages.push(msgObj);
-  if (chat.title === "Chat baru") {
+  if (chat.title === "Chat baru" || chat.title.startsWith("Halo ")) {
     chat.title = (text || files[0]?.name || "Chat").slice(0, 42);
   }
   saveChats();
   renderHistory();
 
-  // Clear welcome card if present
   const chatEl = document.getElementById("chat");
-  const welcome = chatEl.querySelector(".welcome-card");
+  const welcome = chatEl.querySelector(".welcome-card, .special-welcome");
   if (welcome) welcome.remove();
 
-  // Render user bubble
-  if (imgDataUrls.length) {
-    addImageBubble(imgDataUrls, text);
-  } else {
-    addBubble(userText, "user");
-  }
+  if (imgDataUrls.length) addImageBubble(imgDataUrls, text);
+  else addBubble(userText, "user");
 
   input.value = "";
   autoresize();
 
   const sendBtn = document.getElementById("sendBtn");
   sendBtn.disabled = true;
-
   const loading = addTypingBubble();
 
   try {
-    const provider = localStorage.getItem(LS_PROVIDER) || "gemini";
+    const provider     = localStorage.getItem(LS_PROVIDER) || "gemini";
     const systemPrompt = PROMPTS[chat.mode] + "\n\n" + getLangInstruction() + getSpecialNameInstruction();
     let answer;
 
     if (provider === "openrouter") {
-      // ---- OpenRouter ----
       const orModel  = localStorage.getItem(LS_OR_MODEL) || "openai/gpt-4o-mini";
       const messages = [{ role: "system", content: systemPrompt }];
-
       for (const m of chat.messages) {
         if (m.role === "user") {
           const parts = [];
           if (m.images && m.images.length) {
-            for (const img of m.images) {
-              parts.push({ type: "image_url", image_url: { url: img } });
-            }
+            for (const img of m.images) parts.push({ type: "image_url", image_url: { url: img } });
           }
-          if (m.text && m.text !== "[Gambar]") {
-            parts.push({ type: "text", text: m.text });
-          }
+          if (m.text && m.text !== "[Gambar]") parts.push({ type: "text", text: m.text });
           messages.push({ role: "user", content: parts.length > 0 ? parts : m.text });
         } else {
           messages.push({ role: "assistant", content: m.text });
         }
       }
-
       const res  = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method  : "POST",
         headers : {
@@ -1421,15 +1331,11 @@ async function sendMessage() {
       });
       const data = await res.json();
       loading.remove();
-
-      if (data.error) {
-        addBubble("❌ Error: " + (data.error.message || JSON.stringify(data.error)), "bot");
-        return;
-      }
+      if (data.error) { addBubble("❌ Error: " + (data.error.message || JSON.stringify(data.error)), "bot"); return; }
       answer = data?.choices?.[0]?.message?.content || "Tidak ada jawaban.";
 
     } else {
-      // ---- Gemini ----
+      // Gemini
       const contents = [];
       for (const m of chat.messages) {
         const parts = [];
@@ -1440,15 +1346,9 @@ async function sendMessage() {
             parts.push({ inline_data: { mime_type: mime, data: b64 } });
           }
         }
-        if (m.text && m.text !== "[Gambar]") {
-          parts.push({ text: m.text });
-        }
-        contents.push({
-          role  : m.role === "user" ? "user" : "model",
-          parts : parts
-        });
+        if (m.text && m.text !== "[Gambar]") parts.push({ text: m.text });
+        contents.push({ role: m.role === "user" ? "user" : "model", parts });
       }
-
       const res  = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_GEMINI}:generateContent?key=${apiKey}`,
         {
@@ -1456,21 +1356,16 @@ async function sendMessage() {
           headers : { "Content-Type": "application/json" },
           body    : JSON.stringify({
             system_instruction : { parts: [{ text: systemPrompt }] },
-            contents           : contents
+            contents
           })
         }
       );
       const data = await res.json();
       loading.remove();
-
-      if (data.error) {
-        addBubble("❌ Error: " + data.error.message, "bot");
-        return;
-      }
+      if (data.error) { addBubble("❌ Error: " + data.error.message, "bot"); return; }
       answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Tidak ada jawaban.";
     }
 
-    // Save & display answer
     chat.messages.push({ role: "model", text: answer });
     saveChats();
     addBubble(answer, "bot");
@@ -1483,36 +1378,23 @@ async function sendMessage() {
   }
 }
 
-// ===== INPUT HELPERS =====
 function autoresize() {
-  const t       = document.getElementById("text");
+  const t = document.getElementById("text");
   t.style.height = "auto";
   t.style.height = Math.min(t.scrollHeight, 160) + "px";
 }
-
 document.getElementById("text").addEventListener("input", autoresize);
 document.getElementById("text").addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 
-// Drag & drop file ke area chat
+// Drag & drop
 const chatEl = document.getElementById("chat");
-chatEl.addEventListener("dragover", e => {
-  e.preventDefault();
-  chatEl.style.outline = "2px dashed var(--accent)";
-});
-chatEl.addEventListener("dragleave", () => {
-  chatEl.style.outline = "";
-});
+chatEl.addEventListener("dragover", e => { e.preventDefault(); chatEl.style.outline = "2px dashed var(--accent)"; });
+chatEl.addEventListener("dragleave", () => { chatEl.style.outline = ""; });
 chatEl.addEventListener("drop", e => {
-  e.preventDefault();
-  chatEl.style.outline = "";
-  if (e.dataTransfer.files.length) {
-    handleFileSelect({ target: { files: e.dataTransfer.files, value: "" } });
-  }
+  e.preventDefault(); chatEl.style.outline = "";
+  if (e.dataTransfer.files.length) handleFileSelect({ target: { files: e.dataTransfer.files, value: "" } });
 });
 
 applyTheme();
